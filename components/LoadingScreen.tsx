@@ -4,7 +4,8 @@ import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 const STORAGE_KEY = 'saudade-fado:loaded'
-const DURATION_MS = 2200
+const DURATION_MS = 1400
+const ELEGANT_EASE = [0.76, 0, 0.24, 1] as const
 
 export default function LoadingScreen() {
   const [visible, setVisible] = useState(false)
@@ -46,52 +47,104 @@ export default function LoadingScreen() {
           role="status"
           aria-label="A carregar"
           className="fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-charcoal-deep"
-          initial={{ opacity: 1 }}
-          exit={{ opacity: 0, y: '-2%' }}
-          transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
+          initial={{ opacity: 1, clipPath: 'inset(0 0 0 0)' }}
+          exit={{ opacity: 0, clipPath: 'inset(0 0 100% 0)' }}
+          transition={{ duration: 0.95, ease: ELEGANT_EASE }}
         >
           <motion.div
-            className="absolute top-0 left-0 h-px bg-gold"
-            initial={{ width: '0%' }}
-            animate={{ width: '100%' }}
-            transition={{ duration: 1.4, ease: [0.76, 0, 0.24, 1] }}
+            aria-hidden="true"
+            className="absolute inset-0 bg-[linear-gradient(180deg,rgba(193,154,107,0.16)_0%,rgba(13,13,13,0)_34%,rgba(13,13,13,0)_66%,rgba(193,154,107,0.08)_100%)]"
+            initial={{ opacity: 0, scale: 1.14 }}
+            animate={{ opacity: [0, 1, 0.72], scale: 1 }}
+            transition={{ duration: 1.1, ease: ELEGANT_EASE }}
           />
 
-          <div className="flex flex-col items-center gap-3 overflow-hidden px-6 text-center">
+          <motion.div
+            aria-hidden="true"
+            className="absolute inset-x-5 inset-y-7 border-x border-gold/[0.15] sm:inset-x-10 sm:inset-y-10"
+            initial={{ opacity: 0, scaleY: 0.78 }}
+            animate={{ opacity: 1, scaleY: 1 }}
+            transition={{ duration: 0.9, delay: 0.08, ease: ELEGANT_EASE }}
+          />
+
+          <motion.div
+            aria-hidden="true"
+            className="absolute inset-x-0 top-0 h-px bg-gold"
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ duration: 1.2, ease: ELEGANT_EASE }}
+            style={{ transformOrigin: 'center' }}
+          />
+
+          <motion.div
+            aria-hidden="true"
+            className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-gradient-to-r from-transparent via-white/[0.08] to-transparent"
+            initial={{ opacity: 0, scaleX: 0.2 }}
+            animate={{ opacity: [0, 1, 0], scaleX: 1 }}
+            transition={{ duration: 1.05, delay: 0.18, ease: ELEGANT_EASE }}
+          />
+
+          <div className="relative z-10 flex flex-col items-center px-6 text-center">
             <motion.span
-              className="font-label text-[10px] tracking-[0.55em] text-gold uppercase"
-              initial={{ opacity: 0, y: 18 }}
+              className="mb-5 flex items-center gap-4 overflow-hidden font-label text-[10px] uppercase tracking-[0.5em] text-gold"
+              initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.25, ease: [0.76, 0, 0.24, 1] }}
+              transition={{ duration: 0.72, delay: 0.16, ease: ELEGANT_EASE }}
             >
+              <motion.span
+                aria-hidden="true"
+                className="h-px w-8 bg-gold/[0.55]"
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ duration: 0.62, delay: 0.24, ease: ELEGANT_EASE }}
+              />
               Lisboa · Alfama
+              <motion.span
+                aria-hidden="true"
+                className="h-px w-8 bg-gold/[0.55]"
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ duration: 0.62, delay: 0.24, ease: ELEGANT_EASE }}
+              />
             </motion.span>
 
-            <motion.h1
-              className="font-headline text-[clamp(1.8rem,6.5vw,5.5rem)] tracking-[0.06em] sm:tracking-[0.12em] text-white leading-none"
-              initial={{ opacity: 0, y: 32 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.9, delay: 0.4, ease: [0.76, 0, 0.24, 1] }}
-            >
-              Saudade <span className="italic text-gold/90">e</span> Fado
-            </motion.h1>
+            <div className="overflow-hidden pb-3">
+              <motion.h1
+                className="font-headline text-[2.65rem] leading-none tracking-[0.06em] text-white sm:text-6xl sm:tracking-[0.1em] lg:text-[5.5rem]"
+                initial={{ opacity: 0, y: 34, filter: 'blur(6px)' }}
+                animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                transition={{ duration: 0.82, delay: 0.2, ease: ELEGANT_EASE }}
+              >
+                Saudade <span className="italic text-gold/90">e</span> Fado
+              </motion.h1>
+            </div>
+
+            <motion.span
+              aria-hidden="true"
+              className="block h-px w-28 bg-gradient-to-r from-transparent via-gold to-transparent"
+              initial={{ opacity: 0, scaleX: 0.2 }}
+              animate={{ opacity: [0, 1, 0.65], scaleX: 1 }}
+              transition={{ duration: 0.88, delay: 0.42, ease: ELEGANT_EASE }}
+            />
           </div>
 
-          <div className="absolute bottom-12 left-1/2 -translate-x-1/2 w-40 h-px bg-white/10 overflow-hidden">
+          <div className="absolute bottom-10 left-1/2 h-px w-36 -translate-x-1/2 overflow-hidden bg-white/10 sm:bottom-12 sm:w-44">
             <motion.div
-              className="h-full bg-gold origin-left"
+              className="h-full origin-left bg-gold"
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
-              transition={{ duration: DURATION_MS / 1000 - 0.3, ease: 'linear', delay: 0.2 }}
+              transition={{ duration: DURATION_MS / 1000 - 0.18, ease: 'linear', delay: 0.12 }}
               style={{ transformOrigin: 'left' }}
             />
           </div>
 
           <motion.div
-            className="absolute bottom-0 right-0 h-px bg-gold"
-            initial={{ width: '0%' }}
-            animate={{ width: '100%' }}
-            transition={{ duration: 1.4, ease: [0.76, 0, 0.24, 1] }}
+            aria-hidden="true"
+            className="absolute inset-x-0 bottom-0 h-px bg-gold"
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ duration: 1.2, ease: ELEGANT_EASE }}
+            style={{ transformOrigin: 'center' }}
           />
         </motion.div>
       )}

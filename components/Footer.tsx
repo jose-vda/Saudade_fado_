@@ -1,23 +1,30 @@
-import Link from 'next/link'
+'use client'
 
-const footerLinks = [
-  { href: '/elenco', label: 'O Elenco' },
-  { href: '/galeria', label: 'A Experiência' },
-  { href: '/historia', label: 'História' },
-  { href: '/eventos', label: 'Eventos' },
-  { href: '/reserva', label: 'Reservas' },
-] as const
+import Link from 'next/link'
+import { useLanguage } from '@/contexts/LanguageContext'
+import { translations } from '@/lib/translations'
 
 const CURRENT_YEAR = new Date().getFullYear()
 
 export default function Footer() {
+  const { lang } = useLanguage()
+  const tx = translations[lang].footer
+
+  const footerLinks = [
+    { href: '/elenco', label: tx.cast },
+    { href: '/galeria', label: tx.experience },
+    { href: '/historia', label: tx.history },
+    { href: '/eventos', label: tx.events },
+    { href: '/reserva', label: tx.reservations },
+  ]
+
   return (
     <footer
       className="relative w-full border-t border-on-surface/10 bg-surface px-6 md:px-12 py-16 md:py-20"
       aria-labelledby="footer-heading"
     >
       <h2 id="footer-heading" className="sr-only">
-        Rodapé
+        {tx.footerHeading}
       </h2>
 
       <div className="max-w-editorial mx-auto flex flex-col md:flex-row md:items-end md:justify-between gap-12">
@@ -29,12 +36,11 @@ export default function Footer() {
             Saudade e Fado
           </Link>
           <p className="font-body text-sm text-on-surface/55 leading-relaxed font-light">
-            Experiências curadas de Fado no coração de Alfama, onde a tradição
-            encontra o luxo contemporâneo.
+            {tx.tagline}
           </p>
         </div>
 
-        <nav aria-label="Ligações do rodapé" className="flex flex-wrap md:justify-center gap-x-8 gap-y-4">
+        <nav aria-label={tx.footerNav} className="flex flex-wrap md:justify-center gap-x-8 gap-y-4">
           {footerLinks.map(({ href, label }) => (
             <Link
               key={href}
@@ -49,7 +55,7 @@ export default function Footer() {
         <div className="font-label text-[10px] uppercase tracking-[0.18em] text-on-surface/40 md:text-right leading-relaxed">
           © {CURRENT_YEAR} Saudade e Fado.
           <br />
-          Todos os direitos reservados.
+          {tx.rights}
         </div>
       </div>
 
@@ -58,7 +64,7 @@ export default function Footer() {
           Alfama · Lisboa · Portugal
         </span>
         <span className="font-label text-[9px] uppercase tracking-[0.3em] text-on-surface/35">
-          Feito com saudade
+          {tx.madeWith}
         </span>
       </div>
     </footer>

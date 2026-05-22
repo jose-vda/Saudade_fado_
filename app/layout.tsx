@@ -7,6 +7,7 @@ import GSAPProvider from '@/components/GSAPProvider'
 import GrainOverlay from '@/components/GrainOverlay'
 import LoadingScreen from '@/components/LoadingScreen'
 import JsonLd from '@/components/JsonLd'
+import { LanguageProvider } from '@/contexts/LanguageContext'
 
 const playfair = Playfair_Display({
   subsets: ['latin'],
@@ -131,11 +132,13 @@ export default function RootLayout({
         </a>
         <LoadingScreen />
         <GrainOverlay />
-        <GSAPProvider>
-          <Navbar />
-          <div id="main">{children}</div>
-          <Footer />
-        </GSAPProvider>
+        <LanguageProvider>
+          <GSAPProvider>
+            <Navbar />
+            <div id="main">{children}</div>
+            <Footer />
+          </GSAPProvider>
+        </LanguageProvider>
       </body>
     </html>
   )

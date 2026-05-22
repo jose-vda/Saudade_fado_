@@ -7,96 +7,60 @@ import { motion, AnimatePresence } from 'framer-motion'
 import FadeIn from '@/components/FadeIn'
 import HorizontalGalleryStrip from '@/components/HorizontalGalleryStrip'
 import AnimatedTitle from '@/components/AnimatedTitle'
+import { useLanguage } from '@/contexts/LanguageContext'
+import { translations } from '@/lib/translations'
 
 const HERO_IMG =
   'https://lh3.googleusercontent.com/aida-public/AB6AXuAPtRu4aOxF8OkkGzvEEMGvifAIOem2xJfZBDcp0c7zQvCYfNUhpi8OkWRkigBN-cTYqAKxfQ2G0BVBkdRhIwLbo2V9QCRvfMj0PLMD22RJOz9Rd56LFaGPv6YC7k3QYFeog0Fz3CPswuzcht45Ud1daP2HZFxc0Z9r9bOxAkaGafNiYDvkIv7R3jobsbW2a4Bj49lkPk6ly19UChk8lyT6CYITfVooHUiR__0jbE5vOBpy6bslxpcZO788lc3QkS2vBSGS0'
 
-const galleryItems = [
-  {
-    id: 1,
-    category: 'palco',
-    label: 'O Palco',
-    title: 'A Voz Primordial',
-    aspect: 'aspect-[3/4]',
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBzGXkTFa8eFekiiWWyw_XYoL2r2URKrh1E3sDs-YuHOADTfiZss9VwqljUDDWg8FcoqmSmonfRgj3SFrGsUIxDvLpoKyKp0HPbfEfiPT_PB44usyjkKLvibr9kYEJ9qoLj8Ok_CuB042V5N5GAy-dY25yogO_inVDB9Eg7QGAef7L4YtVRyiZ7R1j6GYBAZJeJtYhJ0vXShUR-cctgyZCGGoMvbMhNV-B1EkAV9WAYpTMGFztMsz_cyPPMyTPYHqrY1wnJ4BcZk_k',
-    alt: 'Microfone vintage em clube de jazz',
-  },
-  {
-    id: 2,
-    category: 'mesa',
-    label: 'A Mesa',
-    title: 'Harmonia de Sabores',
-    aspect: 'aspect-square',
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBHTlW54EsO00o0HtOV5zmgqVZGAoZJp6079vDJtbGg5VUsaSP8eLNSLhLqvVVYOoGXVjQ5NgT7UjyHVXf9fUmEWQZJngj8co9c4_OCz1aikKGUmjvPFc7QYR0fS6g2dgHtJZUUgA9kTHVDYgpA_5SuniLGqanReNn08ahxP7k5TMei22eBGq07Ayt14b7FfmKzZ44_7lnehEpu_idFIbuh7GwVb8mU549-YPDizSEXgH6G6ElG8u8y4l6OS6t6NgKylHPa8uBQ_ZU',
-    alt: 'Copo de vinho tinto com vela',
-  },
-  {
-    id: 3,
-    category: 'alma',
-    label: 'A Alma',
-    title: 'O Momento do Silêncio',
-    aspect: 'aspect-[4/5]',
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDsnT8UjFyMXN8HiKiAftCpURBK__bq7E2Pw6mSz5HsKZuawlNs1tydiQNAOZzRiGH0Lryu6D4GWrAsQ2I4IBlfBcCkgyVMCnKBwI0oo86QcpFcU6p9ygp3Dt8wHih2OMd3hNDPbfe5mgYqjRJ68cm3wKj9pHCsy0cF7YTdOdZ0VUEfmCqWNqd6XKPjbklfQzjZA3LEdF4m9Sr-_Edow-j9hGSPeJhc61Afu737Fus4vibKkVVZt3keutkJYNnyF-emk3FDtSlqJfo',
-    alt: 'Silhueta de cantor contra foco de palco',
-  },
-  {
-    id: 4,
-    category: 'mesa',
-    label: 'A Mesa',
-    title: 'Arte no Prato',
-    aspect: 'aspect-square',
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBbmOcihgrIwPIYB4t8JjzGV2F7A4q2bRoC04tAF0UqmO5QhZ0VmxQdRtoftpNvq1yYMkj9edz2-48OJZCovHDiTmRliQM6lKhN4H2epQXRg5FsaLbVBc-758UTtw625lbhRn-kiXOTVoLugNhXTtxeANXuNEcNZ3sW-tgSfffsWf1lJzdNEmPjjN8ZC1xcioDnWRrCwbVCB3T5AwjMRScPfRQyZhoUUr0hP1BSXVFKujmGBTZLQkV_lCYLutX6uc7-4DsnEMVDeWI',
-    alt: 'Entrada de fine dining em ardósia escura',
-  },
-  {
-    id: 5,
-    category: 'palco',
-    label: 'O Palco',
-    title: 'As Cordas Falam',
-    aspect: 'aspect-square',
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCe0l8TwvC1xEIGVvHkSj8eHC-wtaOrnjo0O1e-QS1dxIA4j3Q6VBi6HHj8U1lVt3mgMXM6dhdbVcyssSqO5rY84ezKKkcsKfNbaMuA1pxi63yiovaFWtsBkEGz3rZErPOuL14JXepFgLZY70z5HRG7JDz523titxZyBL8nMpEtzju56idteGcYyqkvt_pzHxlcHzVO_rwVYjwF2Vf3beKw9agff_ETUSgxa30mars5NA7Pohc6dN0-QAecO0LFVBQ7rmknxdGzEJUc',
-    alt: 'Mãos a tocar guitarra clássica em close-up',
-  },
-  {
-    id: 6,
-    category: 'alma',
-    label: 'A Alma',
-    title: 'Sentimento Partilhado',
-    aspect: 'aspect-[2/3]',
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBsmR4ZcDleFfaolLfOpREVphf3dby5P5V7oNalbFjeGkFzPZ38lZB1JFv27yI880cXX14PDUazKb8rI5V-_diwmssYJ6vkBdBubefiksc1muJBHAEEoBSl1ThD_RcJrlPR1TjhsKZz-pBeUvJKtvoGJ6x_7196VRYnb8NvxSL7KxoJ62BQvplMGDONA6xvX3HCZW7taQUE8fEDFQmk1QIrhXh3p1JgxI_mt_HqYffGPo1UzMN0c4GfpT6DviN1IFJaa7kG6-9S970',
-    alt: 'Audiência em performance de música ao vivo',
-  },
-  {
-    id: 7,
-    category: 'alma',
-    label: 'A Alma',
-    title: 'Arquitectura da Memória',
-    aspect: 'aspect-square',
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDOCl-flo0VN2t9s7vyjw9foS9LJel1c-NEwTM7dqxziYoU2pZJpweeYTw9kyRdBZxLepv2jD5_k7T_4PWg0KS_gIckjttsOmUpirkkFZfBWnyc42JnqY26Lj72kZ0mdSDy2TnO0mXxdtwB86TQoEnI1il8DHP5yzfG3nPw4QCx3fhuZPXYpx1a88AG3pqobvmjUpYm7WYDyk_HxI8T7ax2yAaUs-FLiP-p8Z--UeSZwgmTte-jwHnH-yYBJjTEIh6wIcN2SqQ5G_M',
-    alt: 'Arquitectura portuguesa com tectos abobadados e luz dourada',
-  },
+const galleryImages = [
+  'https://lh3.googleusercontent.com/aida-public/AB6AXuBzGXkTFa8eFekiiWWyw_XYoL2r2URKrh1E3sDs-YuHOADTfiZss9VwqljUDDWg8FcoqmSmonfRgj3SFrGsUIxDvLpoKyKp0HPbfEfiPT_PB44usyjkKLvibr9kYEJ9qoLj8Ok_CuB042V5N5GAy-dY25yogO_inVDB9Eg7QGAef7L4YtVRyiZ7R1j6GYBAZJeJtYhJ0vXShUR-cctgyZCGGoMvbMhNV-B1EkAV9WAYpTMGFztMsz_cyPPMyTPYHqrY1wnJ4BcZk_k',
+  'https://lh3.googleusercontent.com/aida-public/AB6AXuBHTlW54EsO00o0HtOV5zmgqVZGAoZJp6079vDJtbGg5VUsaSP8eLNSLhLqvVVYOoGXVjQ5NgT7UjyHVXf9fUmEWQZJngj8co9c4_OCz1aikKGUmjvPFc7QYR0fS6g2dgHtJZUUgA9kTHVDYgpA_5SuniLGqanReNn08ahxP7k5TMei22eBGq07Ayt14b7FfmKzZ44_7lnehEpu_idFIbuh7GwVb8mU549-YPDizSEXgH6G6ElG8u8y4l6OS6t6NgKylHPa8uBQ_ZU',
+  'https://lh3.googleusercontent.com/aida-public/AB6AXuDsnT8UjFyMXN8HiKiAftCpURBK__bq7E2Pw6mSz5HsKZuawlNs1tydiQNAOZzRiGH0Lryu6D4GWrAsQ2I4IBlfBcCkgyVMCnKBwI0oo86QcpFcU6p9ygp3Dt8wHih2OMd3hNDPbfe5mgYqjRJ68cm3wKj9pHCsy0cF7YTdOdZ0VUEfmCqWNqd6XKPjbklfQzjZA3LEdF4m9Sr-_Edow-j9hGSPeJhc61Afu737Fus4vibKkVVZt3keutkJYNnyF-emk3FDtSlqJfo',
+  'https://lh3.googleusercontent.com/aida-public/AB6AXuBbmOcihgrIwPIYB4t8JjzGV2F7A4q2bRoC04tAF0UqmO5QhZ0VmxQdRtoftpNvq1yYMkj9edz2-48OJZCovHDiTmRliQM6lKhN4H2epQXRg5FsaLbVBc-758UTtw625lbhRn-kiXOTVoLugNhXTtxeANXuNEcNZ3sW-tgSfffsWf1lJzdNEmPjjN8ZC1xcioDnWRrCwbVCB3T5AwjMRScPfRQyZhoUUr0hP1BSXVFKujmGBTZLQkV_lCYLutX6uc7-4DsnEMVDeWI',
+  'https://lh3.googleusercontent.com/aida-public/AB6AXuCe0l8TwvC1xEIGVvHkSj8eHC-wtaOrnjo0O1e-QS1dxIA4j3Q6VBi6HHj8U1lVt3mgMXM6dhdbVcyssSqO5rY84ezKKkcsKfNbaMuA1pxi63yiovaFWtsBkEGz3rZErPOuL14JXepFgLZY70z5HRG7JDz523titxZyBL8nMpEtzju56idteGcYyqkvt_pzHxlcHzVO_rwVYjwF2Vf3beKw9agff_ETUSgxa30mars5NA7Pohc6dN0-QAecO0LFVBQ7rmknxdGzEJUc',
+  'https://lh3.googleusercontent.com/aida-public/AB6AXuBsmR4ZcDleFfaolLfOpREVphf3dby5P5V7oNalbFjeGkFzPZ38lZB1JFv27yI880cXX14PDUazKb8rI5V-_diwmssYJ6vkBdBubefiksc1muJBHAEEoBSl1ThD_RcJrlPR1TjhsKZz-pBeUvJKtvoGJ6x_7196VRYnb8NvxSL7KxoJ62BQvplMGDONA6xvX3HCZW7taQUE8fEDFQmk1QIrhXh3p1JgxI_mt_HqYffGPo1UzMN0c4GfpT6DviN1IFJaa7kG6-9S970',
+  'https://lh3.googleusercontent.com/aida-public/AB6AXuDOCl-flo0VN2t9s7vyjw9foS9LJel1c-NEwTM7dqxziYoU2pZJpweeYTw9kyRdBZxLepv2jD5_k7T_4PWg0KS_gIckjttsOmUpirkkFZfBWnyc42JnqY26Lj72kZ0mdSDy2TnO0mXxdtwB86TQoEnI1il8DHP5yzfG3nPw4QCx3fhuZPXYpx1a88AG3pqobvmjUpYm7WYDyk_HxI8T7ax2yAaUs-FLiP-p8Z--UeSZwgmTte-jwHnH-yYBJjTEIh6wIcN2SqQ5G_M',
 ]
 
-const CATEGORIES = ['Todas', 'O Palco', 'A Mesa', 'A Alma']
-const categoryMap: Record<string, string> = {
-  'O Palco': 'palco',
-  'A Mesa': 'mesa',
-  'A Alma': 'alma',
-}
+const galleryAspects = [
+  'aspect-[3/4]',
+  'aspect-square',
+  'aspect-[4/5]',
+  'aspect-square',
+  'aspect-square',
+  'aspect-[2/3]',
+  'aspect-square',
+]
+
+const galleryCategories = ['palco', 'mesa', 'alma', 'mesa', 'palco', 'alma', 'alma']
+
+const categoryKeys = ['all', 'palco', 'mesa', 'alma']
 
 export default function GaleriaClient() {
-  const [active, setActive] = useState('Todas')
+  const { lang } = useLanguage()
+  const tx = translations[lang].galeria
+
+  const [activeKey, setActiveKey] = useState('all')
+
+  const galleryItems = tx.items.map((item, i) => ({
+    ...item,
+    id: i + 1,
+    img: galleryImages[i],
+    aspect: galleryAspects[i],
+    category: galleryCategories[i],
+  }))
 
   const filtered =
-    active === 'Todas'
+    activeKey === 'all'
       ? galleryItems
-      : galleryItems.filter((g) => g.category === categoryMap[active])
+      : galleryItems.filter((g) => g.category === activeKey)
 
   return (
     <main>
       {/* Hero */}
       <section className="relative h-[70vh] w-full overflow-hidden flex items-center justify-center bg-black">
-        <div className="absolute inset-0 opacity-55">
+        <div className="absolute inset-0 opacity-80">
           <Image
             src={HERO_IMG}
             alt="Guitarra Portuguesa"
@@ -107,11 +71,11 @@ export default function GaleriaClient() {
             quality={85}
             className="object-cover grayscale"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-black" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/70" />
         </div>
         <div className="relative z-10 text-center px-6">
           <AnimatedTitle
-            text="A Noite, o Silêncio, o Fado"
+            text={tx.heroTitle}
             as="h1"
             className="font-headline italic text-5xl md:text-7xl text-white tracking-tight leading-tight"
             delay={0.2}
@@ -119,7 +83,7 @@ export default function GaleriaClient() {
           />
           <FadeIn>
             <p className="text-gold font-label uppercase tracking-[0.3em] text-[10px] mt-6">
-              A Experiência Curada
+              {tx.heroSub}
             </p>
           </FadeIn>
         </div>
@@ -127,6 +91,7 @@ export default function GaleriaClient() {
 
       {/* Horizontal Scroll Strip */}
       <HorizontalGalleryStrip
+        exploreLabel={tx.scrollHint}
         items={galleryItems.map((g) => ({
           img: g.img,
           alt: g.alt,
@@ -136,18 +101,18 @@ export default function GaleriaClient() {
       />
 
       {/* Gallery */}
-      <div className="bg-[#0A0A0A] text-white pt-20 pb-32">
+      <div className="bg-surface text-on-surface pt-20 pb-32">
         {/* Category Filter */}
         <FadeIn>
           <div className="max-w-editorial mx-auto px-8 md:px-12 mb-16 flex flex-wrap gap-8 justify-center">
-            {CATEGORIES.map((cat) => (
+            {tx.categories.map((cat, i) => (
               <button
                 key={cat}
-                onClick={() => setActive(cat)}
+                onClick={() => setActiveKey(categoryKeys[i])}
                 className={`font-label text-[11px] uppercase tracking-[0.2em] pb-1 transition-all duration-300 ${
-                  active === cat
-                    ? 'text-gold border-b border-gold'
-                    : 'text-white/65 hover:text-white'
+                  activeKey === categoryKeys[i]
+                    ? 'text-primary border-b border-primary'
+                    : 'text-on-surface/60 hover:text-on-surface'
                 }`}
               >
                 {cat}
@@ -160,65 +125,49 @@ export default function GaleriaClient() {
         <div className="max-w-[1600px] mx-auto px-6 lg:px-12">
           <AnimatePresence mode="wait">
             <motion.div
-              key={active}
+              key={activeKey + lang}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.4 }}
               className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start"
             >
-              {/* Col 1 */}
               <div className="md:col-span-4 flex flex-col gap-6">
-                {filtered
-                  .filter((_, i) => i % 3 === 0)
-                  .map((item) => (
-                    <GalleryCard key={item.id} item={item} />
-                  ))}
+                {filtered.filter((_, i) => i % 3 === 0).map((item) => (
+                  <GalleryCard key={item.id} item={item} />
+                ))}
               </div>
-              {/* Col 2 (center, offset) */}
               <div className="md:col-span-5 flex flex-col gap-6 md:mt-20">
-                {filtered
-                  .filter((_, i) => i % 3 === 1)
-                  .map((item) => (
-                    <GalleryCard key={item.id} item={item} />
-                  ))}
+                {filtered.filter((_, i) => i % 3 === 1).map((item) => (
+                  <GalleryCard key={item.id} item={item} />
+                ))}
               </div>
-              {/* Col 3 */}
               <div className="md:col-span-3 flex flex-col gap-6 md:-mt-12">
-                {filtered
-                  .filter((_, i) => i % 3 === 2)
-                  .map((item) => (
-                    <GalleryCard key={item.id} item={item} />
-                  ))}
+                {filtered.filter((_, i) => i % 3 === 2).map((item) => (
+                  <GalleryCard key={item.id} item={item} />
+                ))}
               </div>
             </motion.div>
           </AnimatePresence>
         </div>
 
-        {/* Cinematic Section */}
+        {/* Documentary */}
         <section className="mt-40 px-6 md:px-12 max-w-editorial mx-auto">
           <div className="relative border border-gold/30 p-4 md:p-6">
-            <div className="relative w-full aspect-video bg-zinc-900 overflow-hidden flex items-center justify-center">
-              <Image
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqDGFEEX-E1IZD5wQFMOGVuNCyiqia-bFAnx-gtSzK85ZLhPaSGeEA4jUZ-VdI4ndMXSLcLD_ldyFrwxV7aZwu6TgFPjNtHaoY87lieCQCQMUNSRNkX9lcUnCFG-tm12oIG5eg41g3WMJ3M77b1Exh0QMecsUg1gMbUrwV0gBdgr1VCrM9Bs80_ow-RHXRAWBFnuoB0G12lC0pna6bZBdaflibneNK5YWV2iiM1QhMDuA2lnUc7QVqdNzVAwGz9d-B34vvOWOxIpE"
-                alt="Palco de teatro com foco de luz"
-                fill
-                className="object-cover opacity-45 grayscale"
+            <div className="mb-5 flex items-center gap-4">
+              <h3 className="font-headline italic text-2xl md:text-4xl text-on-surface">
+                {tx.docTitle}
+              </h3>
+              <div className="h-px flex-1 bg-gold/20" />
+            </div>
+            <div className="relative w-full aspect-video bg-charcoal-deep overflow-hidden">
+              <iframe
+                src="https://www.youtube.com/embed/93fmKniPP8k?start=657&rel=0&modestbranding=1"
+                title={tx.docFrameTitle}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="absolute inset-0 h-full w-full border-0"
               />
-              <motion.button
-                whileHover={{ scale: 1.08 }}
-                whileTap={{ scale: 0.95 }}
-                className="relative z-10 w-24 h-24 md:w-32 md:h-32 border border-white rounded-full flex items-center justify-center group hover:bg-white transition-all duration-500"
-              >
-                <span className="text-white text-4xl group-hover:text-black transition-colors duration-300">
-                  ▶
-                </span>
-              </motion.button>
-              <div className="absolute bottom-10 left-10">
-                <h3 className="font-headline italic text-2xl md:text-4xl text-white">
-                  O Documentário: Heritage
-                </h3>
-              </div>
             </div>
           </div>
         </section>
@@ -230,12 +179,9 @@ export default function GaleriaClient() {
           <div className="max-w-editorial mx-auto flex flex-col md:flex-row items-center justify-between gap-12">
             <div className="max-w-xl">
               <h2 className="font-headline text-4xl md:text-6xl tracking-tight leading-none mb-6">
-                Deseja viver esta experiência?
+                {tx.ctaTitle}
               </h2>
-              <p className="font-body text-on-surface/60 text-lg">
-                O Fado não se explica, sente-se. Reserve o seu lugar para uma
-                noite inesquecível no coração da tradição.
-              </p>
+              <p className="font-body text-on-surface/60 text-lg">{tx.ctaBody}</p>
             </div>
             <div className="relative flex-shrink-0">
               <div className="absolute -inset-4 border border-gold/20 translate-x-2 translate-y-2" />
@@ -243,7 +189,7 @@ export default function GaleriaClient() {
                 href="/reserva"
                 className="relative inline-block bg-primary text-white px-12 py-6 font-label text-xs uppercase tracking-[0.3em] hover:bg-primary-container hover:text-on-primary-container transition-all duration-400"
               >
-                Reservar o Meu Lugar
+                {tx.ctaButton}
               </Link>
             </div>
           </div>
@@ -253,7 +199,11 @@ export default function GaleriaClient() {
   )
 }
 
-function GalleryCard({ item }: { item: (typeof galleryItems)[0] }) {
+function GalleryCard({
+  item,
+}: {
+  item: { id: number; img: string; alt: string; aspect: string; label: string; title: string }
+}) {
   return (
     <motion.div
       layout
@@ -270,10 +220,8 @@ function GalleryCard({ item }: { item: (typeof galleryItems)[0] }) {
           fill
           className="object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
         />
-        <div className="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-          <p className="font-label text-[9px] tracking-widest uppercase text-gold">
-            {item.label}
-          </p>
+        <div className="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-black/85 to-transparent opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-500">
+          <p className="font-label text-xs tracking-wide uppercase text-gold">{item.label}</p>
           <p className="font-headline italic text-lg text-white">{item.title}</p>
         </div>
       </div>

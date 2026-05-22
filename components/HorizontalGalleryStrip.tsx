@@ -13,6 +13,7 @@ interface StripItem {
 
 interface HorizontalGalleryStripProps {
   items: readonly StripItem[]
+  exploreLabel: string
 }
 
 const dims = [
@@ -21,7 +22,10 @@ const dims = [
   { w: 300, h: 420 },
 ] as const
 
-export default function HorizontalGalleryStrip({ items }: HorizontalGalleryStripProps) {
+export default function HorizontalGalleryStrip({
+  items,
+  exploreLabel,
+}: HorizontalGalleryStripProps) {
   const containerRef = useRef<HTMLDivElement>(null)
 
   const { scrollYProgress } = useScroll({
@@ -37,8 +41,8 @@ export default function HorizontalGalleryStrip({ items }: HorizontalGalleryStrip
       className="relative h-[55vh] min-h-[420px] overflow-hidden flex items-center bg-charcoal-deep"
     >
       <div className="absolute top-6 left-8 z-10 pointer-events-none">
-        <span className="font-label text-[9px] uppercase tracking-[0.4em] text-gold/85">
-          Role para explorar
+        <span className="font-label text-xs uppercase tracking-[0.2em] text-gold/85">
+          {exploreLabel}
         </span>
       </div>
 
@@ -59,9 +63,9 @@ export default function HorizontalGalleryStrip({ items }: HorizontalGalleryStrip
                 className="object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
                 loading={i < 3 ? 'eager' : 'lazy'}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <figcaption className="absolute bottom-0 left-0 p-5 translate-y-3 group-hover:translate-y-0 transition-transform duration-500 opacity-0 group-hover:opacity-100">
-                <p className="font-label text-[9px] tracking-widest uppercase text-gold mb-1">
+              <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-500" />
+              <figcaption className="absolute bottom-0 left-0 p-5 sm:translate-y-3 sm:group-hover:translate-y-0 transition-transform duration-500 opacity-100 sm:opacity-0 sm:group-hover:opacity-100">
+                <p className="font-label text-xs tracking-wide uppercase text-gold mb-1">
                   {item.label}
                 </p>
                 <p className="font-headline italic text-base text-white">

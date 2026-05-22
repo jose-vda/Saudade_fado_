@@ -1,21 +1,15 @@
 'use client'
 
-import { useState } from 'react'
-import Image from 'next/image'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import FadeIn from '@/components/FadeIn'
-
-const SIDE_IMG =
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuBXpr4FVQFV9N2TFlKWMsa3dwuTuw8_hp_NMdJbxXt4R6ejDnKoAbyP6V9uMoauYBVMGBHxXOY2zRTmVhq_QBCZ4tjNHIM4noQXAf9p4bIe-CjAMbSx9l_8qNP6MOTmN9Wx9mBzHRZRM0g2vk4NRhvBatMs6pYJ75GMFK66SqU443-KcIgFD6-4dcrbvfBU_eEyDDdxZVMrnBxxCe9NydNviIxRsp-6p4w1Xoyq5I57b_8lvc20xvXZOMFkBoT7zM3jMXFYod_nwUc'
+import VenueMap from '@/components/VenueMap'
+import { useLanguage } from '@/contexts/LanguageContext'
+import { submitLead } from '@/lib/leads'
+import { translations } from '@/lib/translations'
 
 const WEEKDAY_PRICE = 15
 const WEEKEND_PRICE = 17
-
-const MONTH_NAMES = [
-  'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
-  'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro',
-]
-const DAY_NAMES = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb']
 
 function isWeekend(date: Date) {
   const d = date.getDay()
@@ -29,18 +23,24 @@ function toDateString(date: Date) {
   return `${y}-${m}-${d}`
 }
 
-function formatDisplayDate(dateStr: string) {
-  if (!dateStr) return ''
-  const [y, m, d] = dateStr.split('-')
-  return `${d} de ${MONTH_NAMES[parseInt(m) - 1]} de ${y}`
-}
-
 function ReservaCalendar({
   selected,
   onSelect,
+  monthNames,
+  dayNames,
+  prevLabel,
+  nextLabel,
+  legendWeekday,
+  legendWeekend,
 }: {
   selected: string
   onSelect: (date: string) => void
+  monthNames: string[]
+  dayNames: string[]
+  prevLabel: string
+  nextLabel: string
+  legendWeekday: string
+  legendWeekend: string
 }) {
   const today = new Date()
   today.setHours(0, 0, 0, 0)
@@ -68,43 +68,40 @@ function ReservaCalendar({
 
   return (
     <div className="w-full">
-      {/* Month navigation */}
       <div className="flex items-center justify-between mb-5">
         <button
           type="button"
           onClick={prevMonth}
           disabled={isPrevDisabled}
           className="w-8 h-8 flex items-center justify-center text-on-surface/40 hover:text-primary disabled:opacity-20 disabled:cursor-not-allowed transition-colors"
-          aria-label="Mês anterior"
+          aria-label={prevLabel}
         >
           ←
         </button>
         <span className="font-display text-sm font-medium tracking-[0.2em] uppercase text-on-surface">
-          {MONTH_NAMES[month]} {year}
+          {monthNames[month]} {year}
         </span>
         <button
           type="button"
           onClick={nextMonth}
           className="w-8 h-8 flex items-center justify-center text-on-surface/40 hover:text-primary transition-colors"
-          aria-label="Próximo mês"
+          aria-label={nextLabel}
         >
           →
         </button>
       </div>
 
-      {/* Day headers */}
       <div className="grid grid-cols-7 mb-2">
-        {DAY_NAMES.map((d) => (
+        {dayNames.map((d) => (
           <div
             key={d}
-            className="text-center text-[9px] uppercase tracking-widest font-bold text-on-surface/30 py-1"
+            className="text-center text-[11px] uppercase tracking-wide font-bold text-on-surface/45 py-1"
           >
             {d}
           </div>
         ))}
       </div>
 
-      {/* Day cells */}
       <div className="grid grid-cols-7 gap-1">
         {cells.map((date, i) => {
           if (!date) return <div key={i} />
@@ -148,12 +145,8 @@ function ReservaCalendar({
                 {date.getDate()}
               </span>
               <span
-                className={`text-[9px] leading-none font-semibold tracking-wide ${
-                  isSelected
-                    ? 'text-white/80'
-                    : weekend
-                    ? 'text-[#C19A6B]'
-                    : 'text-on-surface/40'
+                className={`text-[11px] leading-none font-semibold tracking-wide ${
+                  isSelected ? 'text-white/80' : weekend ? 'text-[#C19A6B]' : 'text-on-surface/40'
                 }`}
               >
                 {price}€
@@ -163,18 +156,17 @@ function ReservaCalendar({
         })}
       </div>
 
-      {/* Legend */}
-      <div className="flex items-center gap-6 mt-4 pt-4 border-t border-on-surface/10">
+      <div className="flex flex-wrap items-center gap-x-6 gap-y-3 mt-4 pt-4 border-t border-on-surface/10">
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 rounded-sm bg-on-surface/5 border border-on-surface/10" />
-          <span className="text-[10px] text-on-surface/40 uppercase tracking-widest">
-            Seg–Sex · 15€
+          <span className="text-xs text-on-surface/55 uppercase tracking-wide">
+            {legendWeekday}
           </span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded-sm bg-[#C19A6B]/20" />
-          <span className="text-[10px] text-on-surface/40 uppercase tracking-widest">
-            Sáb–Dom · 17€
+          <div className="w-3 h-3 rounded-sm border border-gold/20 bg-gold/10" />
+          <span className="text-xs text-on-surface/55 uppercase tracking-wide">
+            {legendWeekend}
           </span>
         </div>
       </div>
@@ -187,116 +179,150 @@ type FormData = {
   email: string
   phone: string
   date: string
-  guests: string
+  guestsIndex: number
   notes: string
 }
 
 type Errors = Partial<Record<keyof FormData, string>>
 
-function validate(data: FormData): Errors {
-  const errs: Errors = {}
-  if (!data.name.trim()) errs.name = 'Nome obrigatório.'
-  if (!data.email.trim() || !/\S+@\S+\.\S+/.test(data.email))
-    errs.email = 'E-mail inválido.'
-  if (!data.date) errs.date = 'Escolha uma data no calendário.'
-  return errs
-}
-
 export default function ReservaClient() {
+  const { lang } = useLanguage()
+  const tx = translations[lang].reserva
+
   const [form, setForm] = useState<FormData>({
     name: '',
     email: '',
     phone: '',
     date: '',
-    guests: '2 Pessoas',
+    guestsIndex: 1,
     notes: '',
   })
   const [errors, setErrors] = useState<Errors>({})
-  const [submitted, setSubmitted] = useState(false)
+  const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle')
+
+  useEffect(() => {
+    setForm((prev) => ({ ...prev, guestsIndex: 1 }))
+  }, [lang])
+
+  function formatDisplayDate(dateStr: string) {
+    if (!dateStr) return ''
+    const [y, m, d] = dateStr.split('-')
+    if (tx.dateFormat === 'en') {
+      return `${d} ${tx.monthNames[parseInt(m, 10) - 1]} ${y}`
+    }
+    return `${d} de ${tx.monthNames[parseInt(m, 10) - 1]} de ${y}`
+  }
+
+  function validate(data: FormData): Errors {
+    const errs: Errors = {}
+    if (!data.name.trim()) errs.name = tx.errName
+    if (!data.email.trim() || !/\S+@\S+\.\S+/.test(data.email)) errs.email = tx.errEmail
+    if (!data.date) errs.date = tx.errDate
+    return errs
+  }
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }))
-    if (errors[e.target.name as keyof FormData]) {
-      setErrors((prev) => ({ ...prev, [e.target.name]: undefined }))
+    const { name, value } = e.target
+    setForm((prev) => ({ ...prev, [name]: value }))
+    if (status === 'error') setStatus('idle')
+    if (errors[name as keyof FormData]) {
+      setErrors((prev) => ({ ...prev, [name]: undefined }))
     }
   }
 
   const handleDateSelect = (date: string) => {
     setForm((prev) => ({ ...prev, date }))
+    if (status === 'error') setStatus('idle')
     if (errors.date) setErrors((prev) => ({ ...prev, date: undefined }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     const errs = validate(form)
     if (Object.keys(errs).length > 0) {
       setErrors(errs)
       return
     }
-    setSubmitted(true)
+
+    setStatus('submitting')
+
+    try {
+      await submitLead({
+        kind: 'reservation',
+        lang,
+        name: form.name,
+        email: form.email,
+        phone: form.phone,
+        date: form.date,
+        guests: tx.guestOptions[form.guestsIndex],
+        notes: form.notes,
+      })
+      setStatus('success')
+    } catch {
+      setStatus('error')
+    }
   }
 
   const textFields: {
-    id: keyof FormData
+    id: keyof Pick<FormData, 'name' | 'email' | 'phone'>
     label: string
     type: string
     placeholder?: string
   }[] = [
-    { id: 'name', label: 'Nome Completo', type: 'text', placeholder: 'O seu nome' },
-    { id: 'email', label: 'Email', type: 'email', placeholder: 'exemplo@email.com' },
-    { id: 'phone', label: 'Telefone', type: 'tel', placeholder: '+351 000 000 000' },
+    { id: 'name', label: tx.nameLabel, type: 'text', placeholder: tx.namePlaceholder },
+    { id: 'email', label: tx.emailLabel, type: 'email', placeholder: tx.emailPlaceholder },
+    { id: 'phone', label: tx.phoneLabel, type: 'tel', placeholder: tx.phonePlaceholder },
   ]
 
   return (
-    <main className="min-h-screen flex flex-col md:flex-row pt-24">
-      {/* Left — Form */}
-      <section className="w-full md:w-[60%] bg-offwhite px-8 md:px-20 lg:px-28 py-16 flex flex-col justify-center">
-        <div className="max-w-xl w-full mx-auto md:mx-0">
+    <>
+    <main className="min-h-screen bg-offwhite pt-24">
+      <section className="px-6 py-16 md:px-12 md:py-20">
+        <div className="max-w-2xl w-full mx-auto">
           <FadeIn>
             <header className="mb-10">
-              <span className="text-[10px] uppercase tracking-[0.3em] text-primary mb-4 block font-bold">
-                A Curated Heritage
+              <span className="text-xs uppercase tracking-[0.2em] text-primary mb-4 block font-bold">
+                {tx.label}
               </span>
               <h1 className="text-4xl md:text-5xl font-headline text-on-surface mb-4 leading-tight">
-                Sinta o Coração de Lisboa
+                {tx.title}
               </h1>
               <p className="text-on-surface/50 text-sm font-light leading-relaxed max-w-md">
-                Reserve o seu lugar numa jornada sensorial onde a voz e a
-                guitarra portuguesa se encontram sob a luz das velas.
+                {tx.subtitle}
               </p>
             </header>
           </FadeIn>
 
-          {submitted ? (
+          {status === 'success' ? (
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               className="text-center py-20"
             >
               <div className="text-6xl mb-6">✦</div>
-              <h2 className="font-headline text-3xl text-on-surface mb-4">
-                Pedido Enviado
-              </h2>
-              <p className="text-on-surface/55 font-body">
-                A nossa equipa entrará em contacto em breve para confirmar a
-                disponibilidade.
-              </p>
+              <h2 className="font-headline text-3xl text-on-surface mb-4">{tx.successTitle}</h2>
+              <p className="text-on-surface/55 font-body">{tx.successBody}</p>
             </motion.div>
           ) : (
             <FadeIn delay={0.1}>
               <form className="space-y-8" onSubmit={handleSubmit} noValidate>
-
                 {/* Calendar */}
                 <div>
-                  <label className="text-[10px] uppercase tracking-widest text-on-surface/40 font-bold block mb-3">
-                    Escolha a Data
+                  <label className="text-xs uppercase tracking-wide text-on-surface/60 font-bold block mb-3">
+                    {tx.chooseDate}
                   </label>
                   <div className="border border-on-surface/10 rounded-sm p-4 bg-white/40">
                     <ReservaCalendar
                       selected={form.date}
                       onSelect={handleDateSelect}
+                      monthNames={tx.monthNames}
+                      dayNames={tx.dayNames}
+                      prevLabel={tx.prevMonth}
+                      nextLabel={tx.nextMonth}
+                      legendWeekday={tx.legendWeekday}
+                      legendWeekend={tx.legendWeekend}
                     />
                   </div>
                   {form.date && (
@@ -305,11 +331,13 @@ export default function ReservaClient() {
                       animate={{ opacity: 1, y: 0 }}
                       className="text-[11px] text-primary font-semibold mt-2 tracking-wide"
                     >
-                      ✦ {formatDisplayDate(form.date)} · {isWeekend(new Date(form.date + 'T00:00:00')) ? WEEKEND_PRICE : WEEKDAY_PRICE}€ por pessoa
+                      ✦ {formatDisplayDate(form.date)} ·{' '}
+                      {isWeekend(new Date(form.date + 'T00:00:00')) ? WEEKEND_PRICE : WEEKDAY_PRICE}€{' '}
+                      {tx.perPerson}
                     </motion.p>
                   )}
                   {errors.date && (
-                    <p className="text-red-500 text-[10px] mt-1">{errors.date}</p>
+                    <p className="text-red-600 text-xs mt-1">{errors.date}</p>
                   )}
                 </div>
 
@@ -317,7 +345,7 @@ export default function ReservaClient() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-8">
                   {textFields.map(({ id, label, type, placeholder }) => (
                     <div key={id} className="relative">
-                      <label className="text-[10px] uppercase tracking-widest text-on-surface/40 font-bold block mb-1">
+                      <label className="text-xs uppercase tracking-wide text-on-surface/60 font-bold block mb-1">
                         {label}
                       </label>
                       <input
@@ -326,6 +354,7 @@ export default function ReservaClient() {
                         type={type}
                         value={form[id]}
                         onChange={handleChange}
+                        disabled={status === 'submitting'}
                         placeholder={placeholder}
                         className={`w-full bg-transparent border-b py-2 text-on-surface placeholder:text-on-surface/25 focus:outline-none transition-colors duration-300 ${
                           errors[id]
@@ -334,39 +363,42 @@ export default function ReservaClient() {
                         }`}
                       />
                       {errors[id] && (
-                        <p className="text-red-500 text-[10px] mt-1 font-label">
-                          {errors[id]}
-                        </p>
+                        <p className="text-red-600 text-xs mt-1 font-label">{errors[id]}</p>
                       )}
                     </div>
                   ))}
 
                   <div className="relative">
-                    <label className="text-[10px] uppercase tracking-widest text-on-surface/40 font-bold block mb-1">
-                      Número de Pessoas
+                    <label className="text-xs uppercase tracking-wide text-on-surface/60 font-bold block mb-1">
+                      {tx.guestsLabel}
                     </label>
                     <select
-                      name="guests"
-                      value={form.guests}
-                      onChange={handleChange}
+                      value={form.guestsIndex}
+                      onChange={(e) =>
+                        setForm((prev) => ({ ...prev, guestsIndex: parseInt(e.target.value) }))
+                      }
+                      disabled={status === 'submitting'}
                       className="w-full bg-transparent border-b border-outline-variant/50 focus:border-gold py-2 text-on-surface appearance-none focus:outline-none transition-colors duration-300"
                     >
-                      {['1 Pessoa', '2 Pessoas', '3 Pessoas', '4 Pessoas', 'Grupo (5+)'].map(
-                        (g) => <option key={g}>{g}</option>
-                      )}
+                      {tx.guestOptions.map((opt, i) => (
+                        <option key={i} value={i}>
+                          {opt}
+                        </option>
+                      ))}
                     </select>
                   </div>
 
                   <div className="relative md:col-span-2">
-                    <label className="text-[10px] uppercase tracking-widest text-on-surface/40 font-bold block mb-1">
-                      Notas Especiais
+                    <label className="text-xs uppercase tracking-wide text-on-surface/60 font-bold block mb-1">
+                      {tx.notesLabel}
                     </label>
                     <input
                       name="notes"
                       type="text"
                       value={form.notes}
                       onChange={handleChange}
-                      placeholder="Preferências ou restrições"
+                      disabled={status === 'submitting'}
+                      placeholder={tx.notesPlaceholder}
                       className="w-full bg-transparent border-b border-outline-variant/50 focus:border-gold py-2 text-on-surface placeholder:text-on-surface/25 focus:outline-none transition-colors duration-300"
                     />
                   </div>
@@ -377,11 +409,17 @@ export default function ReservaClient() {
                     whileHover={{ scale: 1.01 }}
                     whileTap={{ scale: 0.97 }}
                     type="submit"
+                    disabled={status === 'submitting'}
                     className="w-full py-6 bg-primary-container text-on-primary-container font-bold uppercase tracking-[0.2em] text-xs hover:bg-primary hover:text-white transition-all duration-400 flex items-center justify-center gap-4"
                   >
-                    Solicitar Disponibilidade
+                    {status === 'submitting' ? tx.submitSending : tx.submitButton}
                     <span>→</span>
                   </motion.button>
+                  {status === 'error' && (
+                    <p aria-live="polite" className="mt-4 text-sm text-red-700">
+                      {tx.submitError}
+                    </p>
+                  )}
                 </div>
               </form>
             </FadeIn>
@@ -390,53 +428,40 @@ export default function ReservaClient() {
           {/* Trust */}
           <div className="mt-14 pt-10 border-t border-on-surface/10 grid grid-cols-2 gap-8">
             <div>
-              <h4 className="text-[10px] uppercase tracking-widest text-on-surface/40 font-bold mb-1">
-                Política de Dress Code
+              <h4 className="text-xs uppercase tracking-wide text-on-surface/55 font-bold mb-1">
+                {tx.dresscode}
               </h4>
-              <p className="text-xs text-on-surface/70 font-medium">Casual Chic</p>
+              <p className="text-xs text-on-surface/70 font-medium">{tx.dresscodeValue}</p>
             </div>
             <div>
-              <h4 className="text-[10px] uppercase tracking-widest text-on-surface/40 font-bold mb-1">
-                Horário de Chegada
+              <h4 className="text-xs uppercase tracking-wide text-on-surface/55 font-bold mb-1">
+                {tx.arrival}
               </h4>
-              <p className="text-xs text-on-surface/70 font-medium">Recomendado: 20h00</p>
+              <p className="text-xs text-on-surface/70 font-medium">{tx.arrivalValue}</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Right — Image */}
-      <section className="w-full md:w-[40%] relative min-h-[500px] md:min-h-0 bg-stone-900">
-        <div className="absolute inset-0">
-          <Image
-            src={SIDE_IMG}
-            alt="Mesa romântica à luz de velas numa casa de fado"
-            fill
-            priority
-            sizes="(min-width: 768px) 40vw, 100vw"
-            quality={82}
-            className="object-cover opacity-55"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-transparent to-stone-950/30" />
-        </div>
-        <div className="absolute inset-0 flex items-center justify-center p-12 text-center">
-          <div className="max-w-xs">
-            <div className="w-12 h-px bg-gold mx-auto mb-8" />
-            <h2 className="text-3xl md:text-4xl font-headline italic text-white leading-tight">
-              Prepare-se para uma noite de entrega e tradição
-            </h2>
-            <div className="mt-8 flex justify-center gap-6">
-              <span className="text-gold text-2xl">♩</span>
-              <span className="text-gold text-2xl">🍷</span>
-            </div>
-          </div>
-        </div>
-        <div className="absolute -bottom-12 -left-12 hidden lg:block w-48 h-48 bg-gold/10 backdrop-blur-xl border border-white/5 p-6">
-          <p className="text-[10px] text-gold uppercase tracking-widest leading-relaxed">
-            O Fado não se explica, sente-se.
-          </p>
-        </div>
-      </section>
     </main>
+
+    {/* Map — full width */}
+    <section className="bg-surface py-12 md:py-16">
+      <div className="max-w-editorial mx-auto px-6 md:px-12">
+        <div className="flex items-center gap-4 mb-6">
+          <span className="font-label text-[10px] uppercase tracking-[0.3em] text-primary">
+            {tx.venueMapLabel}
+          </span>
+          <div className="flex-1 h-px bg-on-surface/10" />
+        </div>
+        <VenueMap
+          address={tx.venueAddress}
+          directionsLabel={tx.venueDirections}
+          transportLabel={tx.venueTransport}
+          height="440px"
+        />
+      </div>
+    </section>
+  </>
   )
 }

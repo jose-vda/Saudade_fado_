@@ -4,24 +4,29 @@ import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useLanguage } from '@/contexts/LanguageContext'
+import { translations } from '@/lib/translations'
 
-const navLinks = [
-  { href: '/', label: 'Início' },
-  { href: '/elenco', label: 'O Elenco' },
-  { href: '/galeria', label: 'A Experiência' },
-  { href: '/historia', label: 'História' },
-  { href: '/eventos', label: 'Eventos' },
-] as const
-
-const DARK_HERO_PAGES = new Set(['/', '/galeria', '/historia', '/eventos'])
+const DARK_HERO_PAGES = new Set(['/', '/galeria', '/eventos'])
 
 export default function Navbar() {
   const pathname = usePathname()
+  const { lang, setLang } = useLanguage()
+  const tx = translations[lang].nav
+
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
 
   const hasDarkHero = DARK_HERO_PAGES.has(pathname)
   const isOverDark = !scrolled && hasDarkHero
+
+  const navLinks = [
+    { href: '/', label: tx.home },
+    { href: '/elenco', label: tx.cast },
+    { href: '/galeria', label: tx.experience },
+    { href: '/historia', label: tx.history },
+    { href: '/eventos', label: tx.events },
+  ]
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60)
@@ -34,7 +39,6 @@ export default function Navbar() {
     setMenuOpen(false)
   }, [pathname])
 
-  // Lock body scroll & trap ESC when mobile menu open
   useEffect(() => {
     if (!menuOpen) return
     const prevOverflow = document.body.style.overflow
@@ -51,13 +55,19 @@ export default function Navbar() {
 
   const toggleMenu = useCallback(() => setMenuOpen((v) => !v), [])
 
+  const textColor = isOverDark
+    ? 'text-white/60 hover:text-white'
+    : 'text-on-surface/50 hover:text-on-surface'
+
+  const dividerColor = isOverDark ? 'bg-white/20' : 'bg-on-surface/15'
+
   return (
     <>
       <nav
-        aria-label="Navegação principal"
+        aria-label={tx.mainNav}
         className={`fixed top-0 inset-x-0 z-50 flex justify-between items-center px-6 md:px-12 py-4 md:py-5 transition-[background-color,backdrop-filter,border-color,box-shadow] duration-700 ${
           scrolled
-            ? 'glass-dark shadow-soft-lg'
+            ? 'glass shadow-soft-lg'
             : hasDarkHero
               ? 'bg-gradient-to-b from-black/55 via-black/20 to-transparent'
               : 'bg-white/60 backdrop-blur-xl border-b border-on-surface/5'
@@ -65,7 +75,7 @@ export default function Navbar() {
       >
         <Link
           href="/"
-          aria-label="Saudade e Fado — Início"
+          aria-label={tx.homeLabel}
           className="font-headline text-lg md:text-xl tracking-[0.18em] uppercase text-gold hover:opacity-75 transition-opacity duration-400"
         >
           Saudade e Fado
@@ -82,7 +92,7 @@ export default function Navbar() {
                 className={`font-label text-[11px] uppercase tracking-[0.18em] transition-all duration-400 pb-0.5 border-b ${
                   isActive
                     ? 'text-gold border-gold'
-                    : isOverDark || scrolled
+                    : isOverDark
                       ? 'text-white/85 hover:text-white border-transparent hover:border-white/40'
                       : 'text-on-surface/65 hover:text-gold border-transparent hover:border-gold/40'
                 }`}
@@ -93,38 +103,71 @@ export default function Navbar() {
           })}
         </div>
 
-        <Link
-          href="/reserva"
-          className={`hidden md:inline-flex items-center px-7 py-3 font-label text-[10px] uppercase tracking-widest transition-all duration-500 border ${
-            isOverDark || scrolled
-              ? 'border-gold/60 text-gold hover:bg-gold hover:text-charcoal-deep'
-              : 'border-primary text-primary hover:bg-primary hover:text-white'
-          }`}
-        >
-          Reservar
-        </Link>
+        <div className="hidden md:flex items-center gap-4">
+          {/* PT / EN toggle */}
+          <div className="flex items-center gap-1.5">
+            <button
+              type="button"
+              onClick={() => setLang('pt')}
+              aria-label="Português"
+              className={`font-label text-[10px] uppercase tracking-[0.15em] transition-colors duration-300 ${
+                lang === 'pt'
+                  ? 'text-gold'
+                  : textColor
+              }`}
+            >
+              PT
+            </button>
+            <span className={`text-[10px] ${dividerColor.replace('bg-', 'text-')} opacity-60`}>·</span>
+            <button
+              type="button"
+              onClick={() => setLang('en')}
+              aria-label="English"
+              className={`font-label text-[10px] uppercase tracking-[0.15em] transition-colors duration-300 ${
+                lang === 'en'
+                  ? 'text-gold'
+                  : textColor
+              }`}
+            >
+              EN
+            </button>
+          </div>
+
+          <span className={`w-px h-4 ${dividerColor}`} />
+
+          <Link
+            href="/reserva"
+            className={`inline-flex items-center px-7 py-3 font-label text-[10px] uppercase tracking-widest transition-all duration-500 border ${
+              isOverDark
+                ? 'border-gold/60 text-gold hover:bg-gold hover:text-charcoal-deep'
+                : 'border-primary text-primary hover:bg-primary hover:text-white'
+            }`}
+          >
+            {tx.book}
+          </Link>
+        </div>
 
         <button
           type="button"
           onClick={toggleMenu}
           aria-expanded={menuOpen}
           aria-controls="mobile-menu"
-          aria-label={menuOpen ? 'Fechar menu' : 'Abrir menu'}
+          aria-label={menuOpen ? tx.closeMenu : tx.openMenu}
           className="md:hidden relative flex flex-col gap-1.5 p-2 -mr-2"
         >
           <span
             className={`block w-6 h-px transition-transform duration-400 ease-silk ${
-              isOverDark || scrolled ? 'bg-white' : 'bg-on-surface'
+              isOverDark ? 'bg-white' : 'bg-on-surface'
             } ${menuOpen ? 'translate-y-[7px] rotate-45' : ''}`}
           />
           <span
             className={`block w-6 h-px transition-opacity duration-300 ${
-              isOverDark || scrolled ? 'bg-white' : 'bg-on-surface'
+              isOverDark ? 'bg-white' : 'bg-on-surface'
             } ${menuOpen ? 'opacity-0' : 'opacity-100'}`}
           />
           <span
             className={`block w-6 h-px transition-transform duration-400 ease-silk ${
-              isOverDark || scrolled ? 'bg-white' : 'bg-on-surface'
+              isOverDark ? 'bg-white' : 'bg-on-surface'
             } ${menuOpen ? '-translate-y-[7px] -rotate-45' : ''}`}
           />
         </button>
@@ -141,7 +184,7 @@ export default function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.35 }}
-            className="fixed inset-0 z-40 bg-charcoal-deep/98 backdrop-blur-md flex flex-col items-center justify-center gap-10 md:hidden"
+            className="fixed inset-0 z-40 bg-offwhite/98 backdrop-blur-md flex flex-col items-center justify-center gap-10 md:hidden"
           >
             {navLinks.map(({ href, label }, i) => (
               <motion.div
@@ -153,8 +196,8 @@ export default function Navbar() {
               >
                 <Link
                   href={href}
-                  className={`font-headline text-4xl transition-colors duration-300 hover:text-gold ${
-                    pathname === href ? 'text-gold' : 'text-white/85'
+                  className={`font-headline text-4xl transition-colors duration-300 hover:text-primary ${
+                    pathname === href ? 'text-primary' : 'text-on-surface/80'
                   }`}
                 >
                   {label}
@@ -162,17 +205,45 @@ export default function Navbar() {
               </motion.div>
             ))}
 
+            {/* Language toggle in mobile menu */}
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4, duration: 0.45 }}
-              className="mt-4"
+              transition={{ delay: 0.35, duration: 0.45 }}
+              className="flex items-center gap-3"
+            >
+              <button
+                type="button"
+                onClick={() => setLang('pt')}
+                className={`font-label text-sm uppercase tracking-widest transition-colors duration-300 ${
+                  lang === 'pt' ? 'text-primary' : 'text-on-surface/40 hover:text-on-surface/70'
+                }`}
+              >
+                PT
+              </button>
+              <span className="text-on-surface/20">·</span>
+              <button
+                type="button"
+                onClick={() => setLang('en')}
+                className={`font-label text-sm uppercase tracking-widest transition-colors duration-300 ${
+                  lang === 'en' ? 'text-primary' : 'text-on-surface/40 hover:text-on-surface/70'
+                }`}
+              >
+                EN
+              </button>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.42, duration: 0.45 }}
+              className="mt-2"
             >
               <Link
                 href="/reserva"
-                className="inline-block bg-gold text-charcoal-deep px-10 py-4 font-label text-xs uppercase tracking-widest hover:bg-white transition-colors duration-500"
+                className="inline-block bg-primary text-white px-10 py-4 font-label text-xs uppercase tracking-widest hover:bg-gold hover:text-charcoal-deep transition-colors duration-500"
               >
-                Reservar
+                {tx.book}
               </Link>
             </motion.div>
           </motion.div>
