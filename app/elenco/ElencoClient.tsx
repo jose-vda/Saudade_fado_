@@ -34,7 +34,7 @@ export default function ElencoClient() {
             <span className="font-label text-[10px] uppercase tracking-[0.3em] text-primary mb-6 block">
               {tx.label}
             </span>
-            <h1 className="font-headline text-5xl md:text-7xl lg:text-8xl leading-[1.05] tracking-tight text-balance">
+            <h1 className="font-headline text-4xl leading-[1.08] tracking-tight text-balance sm:text-5xl md:text-7xl lg:text-8xl">
               {tx.title1}{' '}
               <span className="italic font-normal text-gold">{tx.titleEm}</span>{' '}
               {tx.title2}
@@ -90,7 +90,7 @@ export default function ElencoClient() {
                 <span className="font-label text-[10px] uppercase tracking-[0.3em] text-on-surface/45 mb-3 block">
                   {artist.role}
                 </span>
-                <h2 className="font-headline text-3xl text-gold mb-5 uppercase tracking-widest">
+                <h2 className="mb-5 font-headline text-2xl uppercase tracking-[0.14em] text-gold sm:text-3xl sm:tracking-widest">
                   {artist.name}
                 </h2>
                 <p className="text-on-surface/70 mb-10 font-light leading-relaxed">{artist.bio}</p>
@@ -108,7 +108,7 @@ export default function ElencoClient() {
             </blockquote>
             <Link
               href="/reserva"
-              className="inline-block bg-primary text-white px-12 py-5 font-label text-sm tracking-[0.2em] uppercase border border-primary hover:bg-transparent hover:text-primary transition-all duration-500 shadow-soft"
+              className="inline-flex max-w-full justify-center border border-primary bg-primary px-8 py-5 text-center font-label text-xs uppercase tracking-[0.18em] text-white shadow-soft transition-all duration-500 hover:bg-transparent hover:text-primary sm:px-12 sm:text-sm sm:tracking-[0.2em]"
             >
               {tx.cta}
             </Link>

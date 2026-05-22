@@ -28,7 +28,7 @@ function Hero({ tx }: { tx: HomeTx }) {
   return (
     <header
       ref={heroRef}
-      className="relative h-[100svh] w-full flex items-center justify-center overflow-hidden"
+      className="relative flex min-h-[100svh] w-full items-center justify-center overflow-hidden px-0 pb-20 pt-24"
     >
       <motion.div style={{ y: heroY }} className="absolute inset-0 z-0">
         <Image
@@ -47,35 +47,21 @@ function Hero({ tx }: { tx: HomeTx }) {
 
       <motion.div
         style={{ opacity: heroOpacity }}
-        className="relative z-10 text-center max-w-5xl px-6"
+        className="relative z-10 w-full max-w-5xl px-6 text-center"
       >
-        <motion.p
-          initial={{ opacity: 0, letterSpacing: '0.5em' }}
-          animate={{ opacity: 1, letterSpacing: '0.3em' }}
-          transition={{ duration: 1.2, delay: 0.3 }}
-          className="font-label text-[10px] uppercase tracking-[0.3em] text-gold mb-8 block"
-        >
+        <p className="mb-6 block font-label text-[10px] uppercase tracking-[0.24em] text-gold sm:mb-8 sm:tracking-[0.3em]">
           {tx.location}
-        </motion.p>
-        <motion.h1
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.5, ease: [0.4, 0, 0.2, 1] }}
-          className="font-headline text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-white leading-[1.05] tracking-tight text-shadow-hero text-balance"
-        >
-          {tx.heroTitle}
-          <br />
-          <span className="text-gold italic font-normal">{tx.heroSubtitle}</span>
-        </motion.h1>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.9 }}
-          className="mt-12 md:mt-14 flex flex-col sm:flex-row gap-6 justify-center items-center"
-        >
+        </p>
+        <h1 className="mx-auto max-w-[19rem] font-headline text-[2rem] leading-[1.14] tracking-tight text-white text-shadow-hero sm:max-w-none sm:text-6xl sm:leading-[1.05] md:text-7xl lg:text-8xl">
+          <span className="block text-balance">{tx.heroTitle}</span>
+          <span className="mx-auto block max-w-[13ch] text-balance italic font-normal text-gold sm:max-w-none">
+            {tx.heroSubtitle}
+          </span>
+        </h1>
+        <div className="mt-10 flex flex-col items-center justify-center gap-5 sm:mt-12 sm:flex-row sm:gap-6 md:mt-14">
           <Link
             href="/reserva"
-            className="border-draw px-10 py-5 text-white font-label uppercase tracking-[0.2em] text-sm hover:text-gold transition-colors duration-500"
+            className="border-draw px-7 py-4 text-center font-label text-xs uppercase tracking-[0.18em] text-white transition-colors duration-500 hover:text-gold sm:px-10 sm:py-5 sm:text-sm sm:tracking-[0.2em]"
           >
             {tx.bookExperience}
           </Link>
@@ -85,14 +71,14 @@ function Hero({ tx }: { tx: HomeTx }) {
           >
             {tx.seeExperience}
           </Link>
-        </motion.div>
+        </div>
       </motion.div>
 
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+        className="absolute bottom-7 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2 sm:bottom-10"
         aria-hidden="true"
       >
         <motion.div
@@ -107,7 +93,7 @@ function Hero({ tx }: { tx: HomeTx }) {
 
 function Essence({ tx }: { tx: HomeTx }) {
   return (
-    <section className="py-28 md:py-40 bg-surface overflow-hidden">
+    <section className="overflow-hidden bg-surface py-20 sm:py-28 md:py-40">
       <div className="max-w-editorial mx-auto px-6 md:px-12">
         <FadeIn className="text-center mb-12">
           <span className="font-label text-primary uppercase tracking-[0.3em] text-[10px] block">
@@ -175,14 +161,14 @@ function Contact({ tx }: { tx: HomeTx }) {
   }
 
   return (
-    <section className="py-28 md:py-40 bg-surface-container-low text-on-surface overflow-hidden">
+    <section className="overflow-hidden bg-surface-container-low py-20 text-on-surface sm:py-28 md:py-40">
       <div className="max-w-editorial mx-auto px-6 md:px-12">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-32">
           <FadeIn direction="left">
             <span className="font-label text-primary uppercase tracking-[0.3em] text-[10px] mb-8 block">
               {tx.contactLabel}
             </span>
-            <h2 className="font-headline text-4xl md:text-5xl mb-10 leading-snug text-balance">
+            <h2 className="mb-8 font-headline text-3xl leading-snug text-balance sm:text-4xl md:mb-10 md:text-5xl">
               {tx.contactTitle1}{' '}
               <span className="italic text-primary">{tx.contactTitleEm}</span>
               {tx.contactTitle2}

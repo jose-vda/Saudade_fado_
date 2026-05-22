@@ -27,7 +27,7 @@ export default function HistoriaClient() {
   return (
     <main>
       {/* Hero */}
-      <section className="relative h-[80vh] w-full overflow-hidden flex items-center justify-center bg-surface-container-low">
+      <section className="relative flex min-h-[72svh] w-full items-center justify-center overflow-hidden bg-surface-container-low py-24 md:min-h-[80vh]">
         <div className="absolute inset-0">
           <Image
             src={HERO_IMG}
@@ -40,7 +40,7 @@ export default function HistoriaClient() {
             className="object-cover grayscale opacity-35 mix-blend-multiply"
           />
         </div>
-        <div className="relative z-10 text-center px-6 max-w-5xl">
+        <div className="relative z-10 w-full max-w-5xl px-6 text-center">
           <FadeIn>
             <p className="font-label tracking-[0.3em] uppercase text-xs text-primary mb-6">
               {tx.label}
@@ -49,7 +49,7 @@ export default function HistoriaClient() {
           <AnimatedTitle
             text={tx.heroTitle}
             as="h1"
-            className="font-headline italic text-5xl md:text-7xl lg:text-9xl text-on-surface leading-none tracking-tighter"
+            className="font-headline italic text-4xl leading-[1.05] tracking-tight text-on-surface sm:text-5xl md:text-7xl lg:text-9xl lg:tracking-tighter"
             delay={0.2}
             stagger={0.1}
           />
@@ -57,7 +57,7 @@ export default function HistoriaClient() {
       </section>
 
       {/* Magazine Content */}
-      <section className="py-32 px-8 max-w-editorial mx-auto">
+      <section className="mx-auto max-w-editorial px-6 py-24 md:px-8 md:py-32">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-16 items-start">
           <div className="md:col-span-1 hidden md:block">
             <div className="w-full h-px bg-outline-variant/30 mt-4" />
@@ -92,8 +92,8 @@ export default function HistoriaClient() {
       </section>
 
       {/* Blockquote */}
-      <section className="py-24 bg-white border-y border-outline-variant/10">
-        <div className="max-w-5xl mx-auto px-8 text-center">
+      <section className="border-y border-outline-variant/10 bg-white py-20 md:py-24">
+        <div className="mx-auto max-w-5xl px-6 text-center md:px-8">
           <AnimatedTitle
             text={tx.quote}
             as="h2"
@@ -109,11 +109,13 @@ export default function HistoriaClient() {
       </section>
 
       {/* Timeline */}
-      <section className="bg-surface-container-low py-32">
-        <div className="max-w-editorial mx-auto px-8 grid grid-cols-1 md:grid-cols-12 gap-12">
+      <section className="bg-surface-container-low py-24 md:py-32">
+        <div className="mx-auto grid max-w-editorial grid-cols-1 gap-12 px-6 md:grid-cols-12 md:px-8">
           <FadeIn direction="left" className="md:col-span-4">
             <div className="md:sticky md:top-32">
-              <h2 className="font-headline text-5xl text-on-surface mb-6">{tx.timelineTitle}</h2>
+              <h2 className="mb-6 font-headline text-4xl text-on-surface md:text-5xl">
+                {tx.timelineTitle}
+              </h2>
               <p className="text-on-surface-variant font-body leading-loose">{tx.timelineBody}</p>
             </div>
           </FadeIn>
@@ -145,10 +147,10 @@ export default function HistoriaClient() {
       </section>
 
       {/* Instruments */}
-      <section className="py-32 bg-surface">
-        <div className="max-w-editorial mx-auto px-8">
+      <section className="bg-surface py-24 md:py-32">
+        <div className="mx-auto max-w-editorial px-6 md:px-8">
           <FadeIn>
-            <h2 className="font-headline text-4xl text-on-surface mb-24 text-center">
+            <h2 className="mb-16 text-center font-headline text-4xl text-on-surface md:mb-24">
               {tx.instrumentsTitle}
             </h2>
           </FadeIn>
@@ -175,18 +177,18 @@ export default function HistoriaClient() {
       </section>
 
       {/* CTA */}
-      <section className="bg-primary-container/10 py-32 border-t border-outline-variant/20">
+      <section className="border-t border-outline-variant/20 bg-primary-container/10 py-24 md:py-32">
         <FadeIn>
-          <div className="max-w-4xl mx-auto px-8 text-center">
+          <div className="mx-auto max-w-4xl px-6 text-center md:px-8">
             <span className="font-label text-primary tracking-[0.4em] uppercase text-xs mb-8 block">
               {tx.ctaLabel}
             </span>
-            <h2 className="font-headline text-5xl md:text-7xl text-on-surface mb-12">
+            <h2 className="mb-10 font-headline text-4xl text-on-surface md:mb-12 md:text-7xl">
               {tx.ctaTitle}
             </h2>
             <Link
               href="/reserva"
-              className="inline-block bg-primary text-white font-label tracking-widest text-sm py-6 px-12 transition-all duration-400 hover:bg-primary-container hover:text-on-primary-container shadow-2xl"
+              className="inline-flex max-w-full justify-center bg-primary px-8 py-5 text-center font-label text-xs tracking-widest text-white shadow-2xl transition-all duration-400 hover:bg-primary-container hover:text-on-primary-container sm:px-12 sm:py-6 sm:text-sm"
             >
               {tx.ctaButton}
             </Link>

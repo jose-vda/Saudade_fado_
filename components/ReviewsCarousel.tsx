@@ -39,7 +39,8 @@ export default function ReviewsCarousel() {
 
   useEffect(() => {
     const el = trackRef.current
-    if (!el || prefersReducedMotion) return
+    const canAutoScroll = window.matchMedia('(pointer: fine)').matches
+    if (!el || prefersReducedMotion || !canAutoScroll) return
     let prev = performance.now()
 
     const tick = (now: number) => {
@@ -86,8 +87,8 @@ export default function ReviewsCarousel() {
       </p>
 
       <div className="relative">
-        <div className="pointer-events-none absolute inset-y-0 left-0 w-24 z-10 bg-gradient-to-r from-surface-container-low to-transparent" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 w-24 z-10 bg-gradient-to-l from-surface-container-low to-transparent" />
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-12 sm:w-24 z-10 bg-gradient-to-r from-surface-container-low to-transparent" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-12 sm:w-24 z-10 bg-gradient-to-l from-surface-container-low to-transparent" />
 
         <div
           ref={trackRef}
@@ -103,7 +104,7 @@ export default function ReviewsCarousel() {
           {looped.map((review, i) => (
             <article
               key={i}
-              className="w-80 shrink-0 snap-start mx-4 px-8 py-8 border border-gold/20 bg-offwhite"
+              className="w-[min(20rem,calc(100vw-3rem))] shrink-0 snap-start mx-3 px-6 py-7 border border-gold/20 bg-offwhite sm:mx-4 sm:px-8 sm:py-8"
             >
               <StarRow count={5} />
               <p className="font-headline text-base italic text-on-surface leading-relaxed mt-5 mb-6">

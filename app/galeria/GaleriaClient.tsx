@@ -59,7 +59,7 @@ export default function GaleriaClient() {
   return (
     <main>
       {/* Hero */}
-      <section className="relative h-[70vh] w-full overflow-hidden flex items-center justify-center bg-black">
+      <section className="relative flex min-h-[70svh] w-full items-center justify-center overflow-hidden bg-black py-24">
         <div className="absolute inset-0 opacity-80">
           <Image
             src={HERO_IMG}
@@ -73,11 +73,11 @@ export default function GaleriaClient() {
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/70" />
         </div>
-        <div className="relative z-10 text-center px-6">
+        <div className="relative z-10 w-full px-6 text-center">
           <AnimatedTitle
             text={tx.heroTitle}
             as="h1"
-            className="font-headline italic text-5xl md:text-7xl text-white tracking-tight leading-tight"
+            className="font-headline italic text-4xl leading-tight tracking-tight text-white sm:text-5xl md:text-7xl"
             delay={0.2}
             stagger={0.09}
           />
@@ -104,7 +104,7 @@ export default function GaleriaClient() {
       <div className="bg-surface text-on-surface pt-20 pb-32">
         {/* Category Filter */}
         <FadeIn>
-          <div className="max-w-editorial mx-auto px-8 md:px-12 mb-16 flex flex-wrap gap-8 justify-center">
+          <div className="mx-auto mb-14 flex max-w-editorial flex-wrap justify-center gap-x-6 gap-y-4 px-6 md:mb-16 md:gap-8 md:px-12">
             {tx.categories.map((cat, i) => (
               <button
                 key={cat}
@@ -178,16 +178,16 @@ export default function GaleriaClient() {
         <FadeIn>
           <div className="max-w-editorial mx-auto flex flex-col md:flex-row items-center justify-between gap-12">
             <div className="max-w-xl">
-              <h2 className="font-headline text-4xl md:text-6xl tracking-tight leading-none mb-6">
+              <h2 className="mb-6 font-headline text-3xl leading-tight tracking-tight sm:text-4xl md:text-6xl md:leading-none">
                 {tx.ctaTitle}
               </h2>
               <p className="font-body text-on-surface/60 text-lg">{tx.ctaBody}</p>
             </div>
             <div className="relative flex-shrink-0">
-              <div className="absolute -inset-4 border border-gold/20 translate-x-2 translate-y-2" />
+              <div className="absolute -inset-3 translate-x-1 translate-y-1 border border-gold/20 sm:-inset-4 sm:translate-x-2 sm:translate-y-2" />
               <Link
                 href="/reserva"
-                className="relative inline-block bg-primary text-white px-12 py-6 font-label text-xs uppercase tracking-[0.3em] hover:bg-primary-container hover:text-on-primary-container transition-all duration-400"
+                className="relative inline-flex max-w-full justify-center bg-primary px-8 py-5 text-center font-label text-xs uppercase tracking-[0.2em] text-white transition-all duration-400 hover:bg-primary-container hover:text-on-primary-container sm:px-12 sm:py-6 sm:tracking-[0.3em]"
               >
                 {tx.ctaButton}
               </Link>

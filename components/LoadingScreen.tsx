@@ -16,11 +16,14 @@ export default function LoadingScreen() {
     // Já exibido nesta sessão? → não mostra de novo
     if (window.sessionStorage.getItem(STORAGE_KEY) === '1') return
 
-    // Respeita reduced-motion
+    // Keep the intro off the critical path on touch and compact screens.
     const prefersReduced = window.matchMedia(
       '(prefers-reduced-motion: reduce)'
     ).matches
-    if (prefersReduced) {
+    const isMobileLike = window.matchMedia(
+      '(max-width: 767px), (pointer: coarse)'
+    ).matches
+    if (prefersReduced || isMobileLike) {
       window.sessionStorage.setItem(STORAGE_KEY, '1')
       return
     }
@@ -110,7 +113,7 @@ export default function LoadingScreen() {
 
             <div className="overflow-hidden pb-3">
               <motion.h1
-                className="font-headline text-[2.65rem] leading-none tracking-[0.06em] text-white sm:text-6xl sm:tracking-[0.1em] lg:text-[5.5rem]"
+                className="font-headline text-[2.25rem] leading-none tracking-[0.04em] text-white sm:text-6xl sm:tracking-[0.1em] lg:text-[5.5rem]"
                 initial={{ opacity: 0, y: 34, filter: 'blur(6px)' }}
                 animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                 transition={{ duration: 0.82, delay: 0.2, ease: ELEGANT_EASE }}

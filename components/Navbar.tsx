@@ -76,7 +76,7 @@ export default function Navbar() {
         <Link
           href="/"
           aria-label={tx.homeLabel}
-          className="font-headline text-lg md:text-xl tracking-[0.18em] uppercase text-gold hover:opacity-75 transition-opacity duration-400"
+          className="min-w-0 font-headline text-base tracking-[0.12em] uppercase text-gold hover:opacity-75 transition-opacity duration-400 sm:text-lg sm:tracking-[0.18em] md:text-xl"
         >
           Saudade e Fado
         </Link>
@@ -153,22 +153,22 @@ export default function Navbar() {
           aria-expanded={menuOpen}
           aria-controls="mobile-menu"
           aria-label={menuOpen ? tx.closeMenu : tx.openMenu}
-          className="md:hidden relative flex flex-col gap-1.5 p-2 -mr-2"
+          className="fixed right-4 top-4 z-[60] flex h-10 w-10 shrink-0 flex-col items-center justify-center gap-1.5 border border-gold bg-gold p-2 shadow-soft md:hidden"
         >
           <span
-            className={`block w-6 h-px transition-transform duration-400 ease-silk ${
-              isOverDark ? 'bg-white' : 'bg-on-surface'
-            } ${menuOpen ? 'translate-y-[7px] rotate-45' : ''}`}
+            className={`block h-0.5 w-6 bg-charcoal-deep transition-transform duration-400 ease-silk ${
+              menuOpen ? 'translate-y-[7px] rotate-45' : ''
+            }`}
           />
           <span
-            className={`block w-6 h-px transition-opacity duration-300 ${
-              isOverDark ? 'bg-white' : 'bg-on-surface'
-            } ${menuOpen ? 'opacity-0' : 'opacity-100'}`}
+            className={`block h-0.5 w-6 bg-charcoal-deep transition-opacity duration-300 ${
+              menuOpen ? 'opacity-0' : 'opacity-100'
+            }`}
           />
           <span
-            className={`block w-6 h-px transition-transform duration-400 ease-silk ${
-              isOverDark ? 'bg-white' : 'bg-on-surface'
-            } ${menuOpen ? '-translate-y-[7px] -rotate-45' : ''}`}
+            className={`block h-0.5 w-6 bg-charcoal-deep transition-transform duration-400 ease-silk ${
+              menuOpen ? '-translate-y-[7px] -rotate-45' : ''
+            }`}
           />
         </button>
       </nav>
@@ -184,7 +184,7 @@ export default function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.35 }}
-            className="fixed inset-0 z-40 bg-offwhite/98 backdrop-blur-md flex flex-col items-center justify-center gap-10 md:hidden"
+            className="fixed inset-0 z-40 flex flex-col items-center gap-8 overflow-y-auto bg-offwhite/98 px-6 pb-10 pt-28 backdrop-blur-md sm:justify-center sm:gap-10 sm:py-24 md:hidden"
           >
             {navLinks.map(({ href, label }, i) => (
               <motion.div
@@ -196,7 +196,7 @@ export default function Navbar() {
               >
                 <Link
                   href={href}
-                  className={`font-headline text-4xl transition-colors duration-300 hover:text-primary ${
+                  className={`font-headline text-3xl transition-colors duration-300 hover:text-primary sm:text-4xl ${
                     pathname === href ? 'text-primary' : 'text-on-surface/80'
                   }`}
                 >

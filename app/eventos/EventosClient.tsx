@@ -97,7 +97,7 @@ export default function EventosClient() {
   return (
     <main>
       {/* Hero */}
-      <header className="relative h-screen flex items-center justify-center overflow-hidden">
+      <header className="relative flex min-h-[100svh] items-center justify-center overflow-hidden px-0 py-24">
         <div className="absolute inset-0">
           <Image
             src={HERO_IMG}
@@ -110,15 +110,15 @@ export default function EventosClient() {
             className="object-cover brightness-[0.55]"
           />
         </div>
-        <div className="relative z-10 text-center max-w-5xl px-6">
+        <div className="relative z-10 w-full max-w-5xl px-6 text-center">
           <FadeIn>
             <span className="font-label text-gold uppercase tracking-[0.3em] text-[10px] mb-6 block">
               {tx.heroLabel}
             </span>
-            <h1 className="font-headline text-6xl md:text-8xl text-white mb-8 leading-tight">
+            <h1 className="mb-6 font-headline text-4xl leading-tight text-white sm:text-6xl md:mb-8 md:text-8xl">
               {tx.heroTitle}
             </h1>
-            <p className="font-body text-xl text-white/75 font-light max-w-3xl mx-auto leading-relaxed">
+            <p className="mx-auto max-w-3xl font-body text-base font-light leading-relaxed text-white/75 sm:text-xl">
               {tx.heroBody}
             </p>
           </FadeIn>
@@ -126,7 +126,7 @@ export default function EventosClient() {
       </header>
 
       {/* Three Pillars */}
-      <section className="py-32 px-8 md:px-20 bg-surface">
+      <section className="bg-surface px-6 py-24 md:px-20 md:py-32">
         <div className="max-w-editorial mx-auto grid md:grid-cols-3 gap-16">
           {tx.pillars.map((p, i) => (
             <FadeIn key={p.title} delay={i * 0.1}>
@@ -147,11 +147,11 @@ export default function EventosClient() {
       </section>
 
       {/* Corporate */}
-      <section className="py-20 px-8 md:px-20 max-w-editorial mx-auto">
-        <div className="flex flex-col md:flex-row items-center gap-20">
+      <section className="mx-auto max-w-editorial px-6 py-16 md:px-20 md:py-20">
+        <div className="flex flex-col items-center gap-12 md:flex-row md:gap-20">
           <FadeIn direction="left" className="w-full md:w-1/2 order-2 md:order-1">
-            <div className="p-4 bg-surface-container-high inline-block">
-              <div className="relative w-full h-[500px] -translate-y-6 translate-x-6 shadow-2xl overflow-hidden">
+            <div className="inline-block w-full bg-surface-container-high p-3 sm:p-4">
+              <div className="relative h-[360px] w-full overflow-hidden shadow-2xl md:h-[500px] md:-translate-y-6 md:translate-x-6">
                 <Image
                   src={CORP_IMG}
                   alt="Gala corporativa com iluminação âmbar elegante"
@@ -183,8 +183,8 @@ export default function EventosClient() {
       </section>
 
       {/* Private */}
-      <section className="py-20 px-8 md:px-20 max-w-editorial mx-auto">
-        <div className="flex flex-col md:flex-row items-center gap-20">
+      <section className="mx-auto max-w-editorial px-6 py-16 md:px-20 md:py-20">
+        <div className="flex flex-col items-center gap-12 md:flex-row md:gap-20">
           <FadeIn direction="left" className="w-full md:w-1/2 space-y-8">
             <span className="font-label text-primary text-sm uppercase tracking-widest">
               {tx.privLabel}
@@ -203,8 +203,8 @@ export default function EventosClient() {
             </ul>
           </FadeIn>
           <FadeIn direction="right" delay={0.1} className="w-full md:w-1/2">
-            <div className="p-4 bg-gold/15 inline-block">
-              <div className="relative w-full h-[500px] translate-y-6 -translate-x-6 shadow-2xl overflow-hidden">
+            <div className="inline-block w-full bg-gold/15 p-3 sm:p-4">
+              <div className="relative h-[360px] w-full overflow-hidden shadow-2xl md:h-[500px] md:translate-y-6 md:-translate-x-6">
                 <Image
                   src={PRIV_IMG}
                   alt="Jantar íntimo à luz de velas num pátio"
@@ -219,7 +219,7 @@ export default function EventosClient() {
       </section>
 
       {/* Differentials */}
-      <section className="bg-primary-container/10 py-32 px-8 md:px-20">
+      <section className="bg-primary-container/10 px-6 py-24 md:px-20 md:py-32">
         <div className="max-w-editorial mx-auto">
           <FadeIn>
             <div className="text-center mb-20">
@@ -248,8 +248,8 @@ export default function EventosClient() {
       </section>
 
       {/* Proposal Form */}
-      <section id="event-request" className="py-32 px-8 md:px-20 bg-surface">
-        <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-24 items-start">
+      <section id="event-request" className="bg-surface px-6 py-24 md:px-20 md:py-32">
+        <div className="mx-auto grid max-w-5xl items-start gap-16 md:grid-cols-2 md:gap-24">
           <FadeIn direction="left">
             <h2 className="font-headline text-4xl md:text-5xl mb-8 leading-tight">{tx.formTitle}</h2>
             <p className="font-body text-on-surface-variant font-light leading-relaxed mb-10">
@@ -429,12 +429,14 @@ export default function EventosClient() {
       </section>
 
       {/* Final CTA */}
-      <section className="py-40 bg-primary-container/10 text-center px-6 border-t border-outline-variant/20">
+      <section className="border-t border-outline-variant/20 bg-primary-container/10 px-6 py-24 text-center md:py-40">
         <FadeIn>
-          <h2 className="font-headline text-on-surface text-5xl md:text-7xl mb-12">{tx.ctaTitle}</h2>
+          <h2 className="mb-10 font-headline text-4xl text-on-surface md:mb-12 md:text-7xl">
+            {tx.ctaTitle}
+          </h2>
           <Link
             href="#event-request"
-            className="inline-block bg-gold text-on-primary-container px-16 py-8 font-label text-sm font-bold tracking-[0.3em] hover:bg-primary hover:text-white transition-all duration-400"
+            className="inline-flex max-w-full justify-center bg-gold px-8 py-5 text-center font-label text-xs font-bold uppercase tracking-[0.2em] text-on-primary-container transition-all duration-400 hover:bg-primary hover:text-white sm:px-12 sm:py-6 md:px-16 md:py-8 md:text-sm md:tracking-[0.3em]"
           >
             {tx.ctaButton}
           </Link>
