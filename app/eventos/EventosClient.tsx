@@ -26,6 +26,8 @@ type EventForm = {
   message: string
 }
 
+const ROMAN = ['I', 'II', 'III']
+
 export default function EventosClient() {
   const { lang } = useLanguage()
   const tx = translations[lang].eventos
@@ -95,7 +97,7 @@ export default function EventosClient() {
   }
 
   return (
-    <main>
+    <main className="bg-noir">
       {/* Hero */}
       <header className="relative flex min-h-[100svh] items-center justify-center overflow-hidden px-0 py-24">
         <div className="absolute inset-0">
@@ -107,37 +109,72 @@ export default function EventosClient() {
             fetchPriority="high"
             sizes="100vw"
             quality={85}
-            className="object-cover brightness-[0.55]"
+            className="object-cover"
+            style={{
+              filter: 'grayscale(0.7) sepia(0.18) contrast(1.15) brightness(0.45)',
+            }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-noir-deep/55 via-transparent to-noir-deep" />
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background: 'radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.7) 100%)',
+            }}
           />
         </div>
         <div className="relative z-10 w-full max-w-5xl px-6 text-center">
           <FadeIn>
-            <span className="font-label text-gold uppercase tracking-[0.3em] text-[10px] mb-6 block">
-              {tx.heroLabel}
-            </span>
-            <h1 className="mb-6 font-headline text-4xl leading-tight text-white sm:text-6xl md:mb-8 md:text-8xl">
+            <div className="mb-8 flex items-center justify-center gap-4">
+              <span className="h-px w-12 bg-gold/60" />
+              <span className="font-label text-gold-luminous uppercase tracking-[0.5em] text-[10px]">
+                Cap. V · Private Screenings
+              </span>
+              <span className="h-px w-12 bg-gold/60" />
+            </div>
+            <h1 className="mb-8 font-headline italic text-cream text-cinema-sm sm:text-cinema md:text-cinema-lg leading-[1.02] text-shadow-cinema">
               {tx.heroTitle}
             </h1>
-            <p className="mx-auto max-w-3xl font-body text-base font-light leading-relaxed text-white/75 sm:text-xl">
+            <p className="mx-auto max-w-3xl font-body text-base font-light leading-relaxed text-cream/75 sm:text-lg">
               {tx.heroBody}
             </p>
           </FadeIn>
         </div>
       </header>
 
-      {/* Three Pillars */}
-      <section className="bg-surface px-6 py-24 md:px-20 md:py-32">
-        <div className="max-w-editorial mx-auto grid md:grid-cols-3 gap-16">
+      {/* Three Acts (Pillars) */}
+      <section className="bg-noir px-6 py-28 md:px-12 md:py-40">
+        <FadeIn>
+          <div className="max-w-editorial mx-auto text-center mb-20">
+            <span className="font-label text-[10px] uppercase tracking-[0.5em] text-gold-luminous mb-5 block">
+              Three Acts
+            </span>
+            <h2 className="font-headline italic text-cream text-3xl md:text-5xl">
+              A estrutura da noite
+            </h2>
+          </div>
+        </FadeIn>
+        <div className="max-w-editorial mx-auto grid md:grid-cols-3 gap-12 md:gap-16">
           {tx.pillars.map((p, i) => (
-            <FadeIn key={p.title} delay={i * 0.1}>
-              <div className="space-y-6">
-                <div className="w-12 h-12 flex items-center justify-center bg-surface-container-low font-label text-sm text-primary mb-8">
-                  {String(i + 1).padStart(2, '0')}
+            <FadeIn key={p.title} delay={i * 0.12}>
+              <div className="relative space-y-6 p-8 border border-gold/15 bg-noir-ember/40 h-full group hover:border-gold/40 transition-colors duration-700">
+                {/* Corner ornaments */}
+                <span className="absolute top-0 left-0 h-4 w-4 border-t border-l border-gold/60" />
+                <span className="absolute top-0 right-0 h-4 w-4 border-t border-r border-gold/60" />
+                <span className="absolute bottom-0 left-0 h-4 w-4 border-b border-l border-gold/60" />
+                <span className="absolute bottom-0 right-0 h-4 w-4 border-b border-r border-gold/60" />
+
+                <div className="flex items-baseline gap-3 mb-6">
+                  <span className="font-headline italic text-5xl md:text-6xl text-gold-luminous/80">
+                    {ROMAN[i]}
+                  </span>
+                  <span className="font-label text-[9px] uppercase tracking-[0.4em] text-cream/40">
+                    Acto {String(i + 1).padStart(2, '0')}
+                  </span>
                 </div>
-                <h3 className="font-headline text-2xl font-medium border-l-2 border-gold pl-5">
+                <h3 className="font-headline italic text-2xl md:text-3xl text-cream border-l border-gold/50 pl-5">
                   {p.title}
                 </h3>
-                <p className="font-body text-on-surface-variant font-light leading-relaxed pl-5">
+                <p className="font-body text-cream/60 font-light leading-relaxed pl-5">
                   {p.desc}
                 </p>
               </div>
@@ -147,34 +184,48 @@ export default function EventosClient() {
       </section>
 
       {/* Corporate */}
-      <section className="mx-auto max-w-editorial px-6 py-16 md:px-20 md:py-20">
-        <div className="flex flex-col items-center gap-12 md:flex-row md:gap-20">
+      <section className="mx-auto max-w-editorial px-6 py-20 md:px-12 md:py-24">
+        <div className="flex flex-col items-center gap-14 md:flex-row md:gap-24">
           <FadeIn direction="left" className="w-full md:w-1/2 order-2 md:order-1">
-            <div className="inline-block w-full bg-surface-container-high p-3 sm:p-4">
-              <div className="relative h-[360px] w-full overflow-hidden shadow-2xl md:h-[500px] md:-translate-y-6 md:translate-x-6">
+            <div className="relative inline-block w-full p-3 sm:p-4 bg-noir-ember">
+              <span className="absolute top-3 left-3 z-10 h-5 w-5 border-t border-l border-gold/60" />
+              <span className="absolute top-3 right-3 z-10 h-5 w-5 border-t border-r border-gold/60" />
+              <span className="absolute bottom-3 left-3 z-10 h-5 w-5 border-b border-l border-gold/60" />
+              <span className="absolute bottom-3 right-3 z-10 h-5 w-5 border-b border-r border-gold/60" />
+              <div
+                className="relative h-[380px] w-full overflow-hidden shadow-cinema md:h-[520px] md:-translate-y-6 md:translate-x-6"
+                data-cinema-view="view"
+              >
                 <Image
                   src={CORP_IMG}
                   alt="Gala corporativa com iluminação âmbar elegante"
                   fill
                   sizes="(min-width: 768px) 45vw, 100vw"
-                  className="object-cover"
+                  className="object-cover duotone-noir"
                 />
               </div>
             </div>
           </FadeIn>
-          <FadeIn direction="right" delay={0.1} className="w-full md:w-1/2 order-1 md:order-2 space-y-8">
-            <span className="font-label text-primary text-sm uppercase tracking-widest">
+          <FadeIn
+            direction="right"
+            delay={0.1}
+            className="w-full md:w-1/2 order-1 md:order-2 space-y-8"
+          >
+            <span className="font-label text-gold-luminous text-[10px] uppercase tracking-[0.4em]">
               {tx.corpLabel}
             </span>
-            <h2 className="font-headline text-4xl md:text-5xl leading-tight">{tx.corpTitle}</h2>
-            <p className="font-body text-lg font-light text-on-surface-variant leading-relaxed">
+            <h2 className="font-headline italic text-cream text-3xl md:text-5xl leading-tight">
+              {tx.corpTitle}
+            </h2>
+            <div className="h-px w-16 bg-gold-luminous" />
+            <p className="font-body text-base font-light text-cream/65 leading-relaxed">
               {tx.corpBody}
             </p>
-            <ul className="space-y-4 font-body font-medium text-sm">
+            <ul className="space-y-4 font-body font-light text-sm text-cream/75">
               {tx.corpItems.map((item) => (
                 <li key={item} className="flex items-center gap-4">
-                  <span className="w-2 h-2 bg-gold" />
-                  {item.toUpperCase()}
+                  <span className="w-1.5 h-1.5 bg-gold-luminous" />
+                  <span className="tracking-[0.18em] uppercase text-xs">{item}</span>
                 </li>
               ))}
             </ul>
@@ -183,34 +234,44 @@ export default function EventosClient() {
       </section>
 
       {/* Private */}
-      <section className="mx-auto max-w-editorial px-6 py-16 md:px-20 md:py-20">
-        <div className="flex flex-col items-center gap-12 md:flex-row md:gap-20">
+      <section className="mx-auto max-w-editorial px-6 py-20 md:px-12 md:py-24">
+        <div className="flex flex-col items-center gap-14 md:flex-row md:gap-24">
           <FadeIn direction="left" className="w-full md:w-1/2 space-y-8">
-            <span className="font-label text-primary text-sm uppercase tracking-widest">
+            <span className="font-label text-gold-luminous text-[10px] uppercase tracking-[0.4em]">
               {tx.privLabel}
             </span>
-            <h2 className="font-headline text-4xl md:text-5xl leading-tight">{tx.privTitle}</h2>
-            <p className="font-body text-lg font-light text-on-surface-variant leading-relaxed">
+            <h2 className="font-headline italic text-cream text-3xl md:text-5xl leading-tight">
+              {tx.privTitle}
+            </h2>
+            <div className="h-px w-16 bg-gold-luminous" />
+            <p className="font-body text-base font-light text-cream/65 leading-relaxed">
               {tx.privBody}
             </p>
-            <ul className="space-y-4 font-body font-medium text-sm">
+            <ul className="space-y-4 font-body font-light text-sm text-cream/75">
               {tx.privItems.map((item) => (
                 <li key={item} className="flex items-center gap-4">
-                  <span className="w-2 h-2 bg-gold" />
-                  {item.toUpperCase()}
+                  <span className="w-1.5 h-1.5 bg-gold-luminous" />
+                  <span className="tracking-[0.18em] uppercase text-xs">{item}</span>
                 </li>
               ))}
             </ul>
           </FadeIn>
           <FadeIn direction="right" delay={0.1} className="w-full md:w-1/2">
-            <div className="inline-block w-full bg-gold/15 p-3 sm:p-4">
-              <div className="relative h-[360px] w-full overflow-hidden shadow-2xl md:h-[500px] md:translate-y-6 md:-translate-x-6">
+            <div className="relative inline-block w-full p-3 sm:p-4 bg-gold/10">
+              <span className="absolute top-3 left-3 z-10 h-5 w-5 border-t border-l border-gold/60" />
+              <span className="absolute top-3 right-3 z-10 h-5 w-5 border-t border-r border-gold/60" />
+              <span className="absolute bottom-3 left-3 z-10 h-5 w-5 border-b border-l border-gold/60" />
+              <span className="absolute bottom-3 right-3 z-10 h-5 w-5 border-b border-r border-gold/60" />
+              <div
+                className="relative h-[380px] w-full overflow-hidden shadow-cinema md:h-[520px] md:translate-y-6 md:-translate-x-6"
+                data-cinema-view="view"
+              >
                 <Image
                   src={PRIV_IMG}
                   alt="Jantar íntimo à luz de velas num pátio"
                   fill
                   sizes="(min-width: 768px) 45vw, 100vw"
-                  className="object-cover"
+                  className="object-cover duotone-noir"
                 />
               </div>
             </div>
@@ -219,12 +280,17 @@ export default function EventosClient() {
       </section>
 
       {/* Differentials */}
-      <section className="bg-primary-container/10 px-6 py-24 md:px-20 md:py-32">
+      <section className="bg-noir-deep px-6 py-28 md:px-12 md:py-40 border-y border-gold/15">
         <div className="max-w-editorial mx-auto">
           <FadeIn>
-            <div className="text-center mb-20">
-              <h2 className="font-headline text-4xl mb-4">{tx.diffTitle}</h2>
-              <p className="font-body text-on-surface-variant font-light">{tx.diffSub}</p>
+            <div className="text-center mb-20 md:mb-24">
+              <span className="font-label text-[10px] uppercase tracking-[0.5em] text-gold-luminous mb-5 block">
+                Distinguishing Features
+              </span>
+              <h2 className="font-headline italic text-cream text-3xl md:text-5xl mb-4">
+                {tx.diffTitle}
+              </h2>
+              <p className="font-body text-cream/55 font-light">{tx.diffSub}</p>
             </div>
           </FadeIn>
           <div className="grid md:grid-cols-3 gap-10">
@@ -232,12 +298,14 @@ export default function EventosClient() {
               <FadeIn key={d.title} delay={i * 0.1}>
                 <motion.div
                   whileHover={{ y: -4 }}
-                  className="bg-white p-12 text-center border-t-4 border-primary"
+                  transition={{ duration: 0.5, ease: [0.83, 0, 0.17, 1] }}
+                  className="relative bg-noir-ember p-10 text-center border-t border-gold-luminous"
                 >
-                  <h4 className="font-label text-xs font-bold text-primary mb-6 uppercase tracking-widest">
+                  <span className="absolute -top-px left-0 h-px w-12 bg-gold-luminous" />
+                  <h4 className="font-label text-[10px] font-medium text-gold-luminous mb-7 uppercase tracking-[0.4em]">
                     {d.title}
                   </h4>
-                  <p className="font-body text-sm font-light leading-relaxed text-on-surface-variant">
+                  <p className="font-body text-sm font-light leading-relaxed text-cream/65">
                     {d.desc}
                   </p>
                 </motion.div>
@@ -248,30 +316,36 @@ export default function EventosClient() {
       </section>
 
       {/* Proposal Form */}
-      <section id="event-request" className="bg-surface px-6 py-24 md:px-20 md:py-32">
+      <section id="event-request" className="bg-noir px-6 py-28 md:px-12 md:py-40">
         <div className="mx-auto grid max-w-5xl items-start gap-16 md:grid-cols-2 md:gap-24">
           <FadeIn direction="left">
-            <h2 className="font-headline text-4xl md:text-5xl mb-8 leading-tight">{tx.formTitle}</h2>
-            <p className="font-body text-on-surface-variant font-light leading-relaxed mb-10">
+            <span className="font-label text-[10px] uppercase tracking-[0.5em] text-gold-luminous mb-6 block">
+              Request a Private Screening
+            </span>
+            <h2 className="font-headline italic text-cream text-3xl md:text-5xl mb-8 leading-tight">
+              {tx.formTitle}
+            </h2>
+            <div className="h-px w-16 bg-gold-luminous mb-8" />
+            <p className="font-body text-cream/60 font-light leading-relaxed mb-10">
               {tx.formBody}
             </p>
             <div className="space-y-5">
               <div className="flex items-center gap-5">
-                <span aria-hidden="true" className="font-label text-primary">
+                <span aria-hidden="true" className="font-label text-gold-luminous text-xs tracking-widest">
                   @
                 </span>
                 <a
                   href="mailto:eventos@saudadeefado.pt"
-                  className="font-body text-sm hover:text-primary"
+                  className="link-cinema font-body text-sm text-cream/80 hover:text-gold-luminous"
                 >
                   eventos@saudadeefado.pt
                 </a>
               </div>
               <div className="flex items-center gap-5">
-                <span aria-hidden="true" className="font-label text-primary">
+                <span aria-hidden="true" className="font-label text-gold-luminous text-xs tracking-widest">
                   PT
                 </span>
-                <span className="font-body text-sm">Baixa-Chiado, Lisboa</span>
+                <span className="font-body text-sm text-cream/70">Alfama, Lisboa</span>
               </div>
             </div>
           </FadeIn>
@@ -282,7 +356,7 @@ export default function EventosClient() {
                 <div>
                   <label
                     htmlFor="event-name"
-                    className="font-label text-xs uppercase tracking-wide text-on-surface-variant block mb-2"
+                    className="font-label text-[10px] uppercase tracking-[0.3em] text-cream/55 block mb-3"
                   >
                     {tx.formName}
                   </label>
@@ -293,13 +367,13 @@ export default function EventosClient() {
                     value={form.name}
                     onChange={(event) => updateField('name', event.target.value)}
                     disabled={status === 'submitting'}
-                    className="w-full bg-transparent border-b border-outline-variant focus:border-gold focus:ring-0 transition-colors py-3 outline-none"
+                    className="w-full bg-transparent border-b border-cream/15 focus:border-gold-luminous focus:ring-0 transition-colors py-3 outline-none text-cream"
                   />
                 </div>
                 <div>
                   <label
                     htmlFor="event-email"
-                    className="font-label text-xs uppercase tracking-wide text-on-surface-variant block mb-2"
+                    className="font-label text-[10px] uppercase tracking-[0.3em] text-cream/55 block mb-3"
                   >
                     {tx.formEmail}
                   </label>
@@ -310,14 +384,14 @@ export default function EventosClient() {
                     value={form.email}
                     onChange={(event) => updateField('email', event.target.value)}
                     disabled={status === 'submitting'}
-                    className="w-full bg-transparent border-b border-outline-variant focus:border-gold focus:ring-0 transition-colors py-3 outline-none"
+                    className="w-full bg-transparent border-b border-cream/15 focus:border-gold-luminous focus:ring-0 transition-colors py-3 outline-none text-cream"
                   />
                 </div>
               </div>
               <div>
                 <label
                   htmlFor="event-company"
-                  className="font-label text-xs uppercase tracking-wide text-on-surface-variant block mb-2"
+                  className="font-label text-[10px] uppercase tracking-[0.3em] text-cream/55 block mb-3"
                 >
                   {tx.formCompany}
                 </label>
@@ -328,14 +402,14 @@ export default function EventosClient() {
                   value={form.company}
                   onChange={(event) => updateField('company', event.target.value)}
                   disabled={status === 'submitting'}
-                  className="w-full bg-transparent border-b border-outline-variant focus:border-gold focus:ring-0 transition-colors py-3 outline-none"
+                  className="w-full bg-transparent border-b border-cream/15 focus:border-gold-luminous focus:ring-0 transition-colors py-3 outline-none text-cream"
                 />
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                 <div>
                   <label
                     htmlFor="event-type"
-                    className="font-label text-xs uppercase tracking-wide text-on-surface-variant block mb-2"
+                    className="font-label text-[10px] uppercase tracking-[0.3em] text-cream/55 block mb-3"
                   >
                     {tx.formEventType}
                   </label>
@@ -344,7 +418,7 @@ export default function EventosClient() {
                     value={form.eventType}
                     onChange={(event) => updateField('eventType', event.target.value)}
                     disabled={status === 'submitting'}
-                    className="w-full bg-transparent border-b border-outline-variant focus:border-gold focus:ring-0 py-3 outline-none appearance-none"
+                    className="w-full bg-noir-deep border-b border-cream/15 focus:border-gold-luminous focus:ring-0 py-3 outline-none appearance-none text-cream"
                   >
                     <option value="" disabled>
                       {tx.formEventType}
@@ -359,7 +433,7 @@ export default function EventosClient() {
                 <div>
                   <label
                     htmlFor="event-date"
-                    className="font-label text-xs uppercase tracking-wide text-on-surface-variant block mb-2"
+                    className="font-label text-[10px] uppercase tracking-[0.3em] text-cream/55 block mb-3"
                   >
                     {tx.formDate}
                   </label>
@@ -369,14 +443,14 @@ export default function EventosClient() {
                     value={form.eventDate}
                     onChange={(event) => updateField('eventDate', event.target.value)}
                     disabled={status === 'submitting'}
-                    className="w-full bg-transparent border-b border-outline-variant focus:border-gold focus:ring-0 py-3 outline-none"
+                    className="w-full bg-transparent border-b border-cream/15 focus:border-gold-luminous focus:ring-0 py-3 outline-none text-cream [color-scheme:dark]"
                   />
                 </div>
               </div>
               <div>
                 <label
                   htmlFor="event-guests"
-                  className="font-label text-xs uppercase tracking-wide text-on-surface-variant block mb-2"
+                  className="font-label text-[10px] uppercase tracking-[0.3em] text-cream/55 block mb-3"
                 >
                   {tx.formGuests}
                 </label>
@@ -387,13 +461,13 @@ export default function EventosClient() {
                   value={form.guestCount}
                   onChange={(event) => updateField('guestCount', event.target.value)}
                   disabled={status === 'submitting'}
-                  className="w-full bg-transparent border-b border-outline-variant focus:border-gold focus:ring-0 py-3 outline-none"
+                  className="w-full bg-transparent border-b border-cream/15 focus:border-gold-luminous focus:ring-0 py-3 outline-none text-cream"
                 />
               </div>
               <div>
                 <label
                   htmlFor="event-message"
-                  className="font-label text-xs uppercase tracking-wide text-on-surface-variant block mb-2"
+                  className="font-label text-[10px] uppercase tracking-[0.3em] text-cream/55 block mb-3"
                 >
                   {tx.formMessage}
                 </label>
@@ -403,22 +477,22 @@ export default function EventosClient() {
                   value={form.message}
                   onChange={(event) => updateField('message', event.target.value)}
                   disabled={status === 'submitting'}
-                  className="w-full resize-y bg-transparent border-b border-outline-variant focus:border-gold focus:ring-0 py-3 outline-none"
+                  className="w-full resize-y bg-transparent border-b border-cream/15 focus:border-gold-luminous focus:ring-0 py-3 outline-none text-cream"
                 />
               </div>
               <motion.button
-                whileHover={{ scale: 1.01 }}
+                whileHover={{ y: -1 }}
                 whileTap={{ scale: 0.98 }}
                 type="submit"
                 disabled={status === 'submitting'}
-                className="w-full bg-primary text-white py-6 font-label text-xs uppercase tracking-[0.2em] hover:bg-primary-container hover:text-on-primary-container transition-all duration-400"
+                className="btn-cinema w-full"
               >
                 {status === 'submitting' ? tx.formSending : tx.formSubmit}
               </motion.button>
               <p
                 aria-live="polite"
                 className={`min-h-6 text-sm ${
-                  status === 'success' ? 'text-primary' : 'text-red-700'
+                  status === 'success' ? 'text-gold-luminous' : 'text-red-400'
                 }`}
               >
                 {feedback}
@@ -429,17 +503,26 @@ export default function EventosClient() {
       </section>
 
       {/* Final CTA */}
-      <section className="border-t border-outline-variant/20 bg-primary-container/10 px-6 py-24 text-center md:py-40">
+      <section className="relative border-t border-gold/15 bg-noir-deep px-6 py-28 text-center md:py-40 overflow-hidden">
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: 'radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.7) 100%)',
+          }}
+        />
         <FadeIn>
-          <h2 className="mb-10 font-headline text-4xl text-on-surface md:mb-12 md:text-7xl">
-            {tx.ctaTitle}
-          </h2>
-          <Link
-            href="#event-request"
-            className="inline-flex max-w-full justify-center bg-gold px-8 py-5 text-center font-label text-xs font-bold uppercase tracking-[0.2em] text-on-primary-container transition-all duration-400 hover:bg-primary hover:text-white sm:px-12 sm:py-6 md:px-16 md:py-8 md:text-sm md:tracking-[0.3em]"
-          >
-            {tx.ctaButton}
-          </Link>
+          <div className="relative">
+            <span className="font-label text-[10px] uppercase tracking-[0.5em] text-gold-luminous mb-10 block">
+              The Premiere
+            </span>
+            <h2 className="mb-12 font-headline italic text-cream text-4xl md:text-6xl lg:text-7xl">
+              {tx.ctaTitle}
+            </h2>
+            <div className="mx-auto h-px w-20 bg-gold-luminous mb-12" />
+            <Link href="#event-request" className="btn-cinema">
+              {tx.ctaButton}
+            </Link>
+          </div>
         </FadeIn>
       </section>
     </main>

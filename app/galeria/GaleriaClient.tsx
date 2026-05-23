@@ -2,11 +2,10 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
-import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import FadeIn from '@/components/FadeIn'
-import HorizontalGalleryStrip from '@/components/HorizontalGalleryStrip'
-import AnimatedTitle from '@/components/AnimatedTitle'
+import YoutubeEmbed from '@/components/YoutubeEmbed'
+import ReservaButton from '@/components/ReservaButton'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { translations } from '@/lib/translations'
 
@@ -14,27 +13,18 @@ const HERO_IMG =
   'https://lh3.googleusercontent.com/aida-public/AB6AXuAPtRu4aOxF8OkkGzvEEMGvifAIOem2xJfZBDcp0c7zQvCYfNUhpi8OkWRkigBN-cTYqAKxfQ2G0BVBkdRhIwLbo2V9QCRvfMj0PLMD22RJOz9Rd56LFaGPv6YC7k3QYFeog0Fz3CPswuzcht45Ud1daP2HZFxc0Z9r9bOxAkaGafNiYDvkIv7R3jobsbW2a4Bj49lkPk6ly19UChk8lyT6CYITfVooHUiR__0jbE5vOBpy6bslxpcZO788lc3QkS2vBSGS0'
 
 const galleryImages = [
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuBzGXkTFa8eFekiiWWyw_XYoL2r2URKrh1E3sDs-YuHOADTfiZss9VwqljUDDWg8FcoqmSmonfRgj3SFrGsUIxDvLpoKyKp0HPbfEfiPT_PB44usyjkKLvibr9kYEJ9qoLj8Ok_CuB042V5N5GAy-dY25yogO_inVDB9Eg7QGAef7L4YtVRyiZ7R1j6GYBAZJeJtYhJ0vXShUR-cctgyZCGGoMvbMhNV-B1EkAV9WAYpTMGFztMsz_cyPPMyTPYHqrY1wnJ4BcZk_k',
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuBHTlW54EsO00o0HtOV5zmgqVZGAoZJp6079vDJtbGg5VUsaSP8eLNSLhLqvVVYOoGXVjQ5NgT7UjyHVXf9fUmEWQZJngj8co9c4_OCz1aikKGUmjvPFc7QYR0fS6g2dgHtJZUUgA9kTHVDYgpA_5SuniLGqanReNn08ahxP7k5TMei22eBGq07Ayt14b7FfmKzZ44_7lnehEpu_idFIbuh7GwVb8mU549-YPDizSEXgH6G6ElG8u8y4l6OS6t6NgKylHPa8uBQ_ZU',
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuDsnT8UjFyMXN8HiKiAftCpURBK__bq7E2Pw6mSz5HsKZuawlNs1tydiQNAOZzRiGH0Lryu6D4GWrAsQ2I4IBlfBcCkgyVMCnKBwI0oo86QcpFcU6p9ygp3Dt8wHih2OMd3hNDPbfe5mgYqjRJ68cm3wKj9pHCsy0cF7YTdOdZ0VUEfmCqWNqd6XKPjbklfQzjZA3LEdF4m9Sr-_Edow-j9hGSPeJhc61Afu737Fus4vibKkVVZt3keutkJYNnyF-emk3FDtSlqJfo',
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuBbmOcihgrIwPIYB4t8JjzGV2F7A4q2bRoC04tAF0UqmO5QhZ0VmxQdRtoftpNvq1yYMkj9edz2-48OJZCovHDiTmRliQM6lKhN4H2epQXRg5FsaLbVBc-758UTtw625lbhRn-kiXOTVoLugNhXTtxeANXuNEcNZ3sW-tgSfffsWf1lJzdNEmPjjN8ZC1xcioDnWRrCwbVCB3T5AwjMRScPfRQyZhoUUr0hP1BSXVFKujmGBTZLQkV_lCYLutX6uc7-4DsnEMVDeWI',
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuCe0l8TwvC1xEIGVvHkSj8eHC-wtaOrnjo0O1e-QS1dxIA4j3Q6VBi6HHj8U1lVt3mgMXM6dhdbVcyssSqO5rY84ezKKkcsKfNbaMuA1pxi63yiovaFWtsBkEGz3rZErPOuL14JXepFgLZY70z5HRG7JDz523titxZyBL8nMpEtzju56idteGcYyqkvt_pzHxlcHzVO_rwVYjwF2Vf3beKw9agff_ETUSgxa30mars5NA7Pohc6dN0-QAecO0LFVBQ7rmknxdGzEJUc',
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuBsmR4ZcDleFfaolLfOpREVphf3dby5P5V7oNalbFjeGkFzPZ38lZB1JFv27yI880cXX14PDUazKb8rI5V-_diwmssYJ6vkBdBubefiksc1muJBHAEEoBSl1ThD_RcJrlPR1TjhsKZz-pBeUvJKtvoGJ6x_7196VRYnb8NvxSL7KxoJ62BQvplMGDONA6xvX3HCZW7taQUE8fEDFQmk1QIrhXh3p1JgxI_mt_HqYffGPo1UzMN0c4GfpT6DviN1IFJaa7kG6-9S970',
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuDOCl-flo0VN2t9s7vyjw9foS9LJel1c-NEwTM7dqxziYoU2pZJpweeYTw9kyRdBZxLepv2jD5_k7T_4PWg0KS_gIckjttsOmUpirkkFZfBWnyc42JnqY26Lj72kZ0mdSDy2TnO0mXxdtwB86TQoEnI1il8DHP5yzfG3nPw4QCx3fhuZPXYpx1a88AG3pqobvmjUpYm7WYDyk_HxI8T7ax2yAaUs-FLiP-p8Z--UeSZwgmTte-jwHnH-yYBJjTEIh6wIcN2SqQ5G_M',
+  '/images/galeria/pexels-abedalbaset-12491762.jpg',
+  '/images/galeria/pexels-alex-dos-santos-305643819-34788370.jpg',
+  '/images/galeria/pexels-helenalopes-9124698.jpg',
+  '/images/galeria/pexels-juan-manuel-perez-290426532-31517625.jpg',
+  '/images/galeria/pexels-konect2-8593889.jpg',
+  '/images/galeria/pexels-leonardo-delsabio-2150529415-33731188.jpg',
+  '/images/galeria/pexels-leonardo-delsabio-2150529415-33731266.jpg',
+  '/images/galeria/pexels-ruha-zaitoun-98933750-34024225.jpg',
+  '/images/galeria/pexels-stephanie-vasco-197682735-11514793.jpg',
 ]
 
-const galleryAspects = [
-  'aspect-[3/4]',
-  'aspect-square',
-  'aspect-[4/5]',
-  'aspect-square',
-  'aspect-square',
-  'aspect-[2/3]',
-  'aspect-square',
-]
-
-const galleryCategories = ['palco', 'mesa', 'alma', 'mesa', 'palco', 'alma', 'alma']
-
+const galleryCategories = ['palco', 'alma', 'mesa', 'palco', 'alma', 'mesa', 'palco', 'alma', 'mesa']
 const categoryKeys = ['all', 'palco', 'mesa', 'alma']
 
 export default function GaleriaClient() {
@@ -47,7 +37,6 @@ export default function GaleriaClient() {
     ...item,
     id: i + 1,
     img: galleryImages[i],
-    aspect: galleryAspects[i],
     category: galleryCategories[i],
   }))
 
@@ -57,10 +46,11 @@ export default function GaleriaClient() {
       : galleryItems.filter((g) => g.category === activeKey)
 
   return (
-    <main>
+    <main className="bg-noir">
+
       {/* Hero */}
-      <section className="relative flex min-h-[70svh] w-full items-center justify-center overflow-hidden bg-black py-24">
-        <div className="absolute inset-0 opacity-80">
+      <section className="relative flex min-h-[52svh] w-full items-center justify-center overflow-hidden bg-noir-deep py-20 pt-28">
+        <div className="absolute inset-0">
           <Image
             src={HERO_IMG}
             alt="Guitarra Portuguesa"
@@ -69,60 +59,136 @@ export default function GaleriaClient() {
             fetchPriority="high"
             sizes="100vw"
             quality={85}
-            className="object-cover grayscale"
+            className="object-cover"
+            style={{
+              filter: 'grayscale(0.8) sepia(0.18) contrast(1.1) brightness(0.68)',
+            }}
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/70" />
+          <div className="absolute inset-0 bg-gradient-to-b from-noir-deep/60 via-transparent to-noir-deep" />
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background: 'radial-gradient(ellipse at center, transparent 35%, rgba(0,0,0,0.65) 100%)',
+            }}
+          />
         </div>
         <div className="relative z-10 w-full px-6 text-center">
-          <AnimatedTitle
-            text={tx.heroTitle}
-            as="h1"
-            className="font-headline italic text-4xl leading-tight tracking-tight text-white sm:text-5xl md:text-7xl"
-            delay={0.2}
-            stagger={0.09}
-          />
           <FadeIn>
-            <p className="text-gold font-label uppercase tracking-[0.3em] text-[10px] mt-6">
+            <div className="mb-6 flex items-center justify-center gap-4">
+              <span className="h-px w-10 bg-gold/60" />
+              <span className="font-label text-[10px] uppercase tracking-[0.5em] text-gold-luminous">
+                Cap. III · A Reel
+              </span>
+              <span className="h-px w-10 bg-gold/60" />
+            </div>
+          </FadeIn>
+          <FadeIn delay={0.15}>
+            <h1 className="font-headline italic text-3xl sm:text-4xl md:text-5xl leading-snug tracking-tight text-cream text-shadow-cinema text-balance">
+              {tx.heroTitle}
+            </h1>
+          </FadeIn>
+          <FadeIn delay={0.3}>
+            <p className="text-gold-luminous font-label uppercase tracking-[0.4em] text-[10px] mt-6">
               {tx.heroSub}
             </p>
           </FadeIn>
         </div>
       </section>
 
-      {/* Horizontal Scroll Strip */}
-      <HorizontalGalleryStrip
-        exploreLabel={tx.scrollHint}
-        items={galleryItems.map((g) => ({
-          img: g.img,
-          alt: g.alt,
-          label: g.label,
-          title: g.title,
-        }))}
-      />
-
-      {/* Gallery */}
-      <div className="bg-surface text-on-surface pt-20 pb-32">
-        {/* Category Filter */}
+      {/* Documentary — primeiro conteúdo, mais engajamento */}
+      <section className="bg-noir-deep py-16 md:py-20 px-6 md:px-12 border-t border-gold/15">
         <FadeIn>
-          <div className="mx-auto mb-14 flex max-w-editorial flex-wrap justify-center gap-x-6 gap-y-4 px-6 md:mb-16 md:gap-8 md:px-12">
+          <div className="max-w-4xl mx-auto">
+            <div className="flex items-center gap-4 mb-8">
+              <span className="font-label text-[10px] uppercase tracking-[0.4em] text-gold-luminous">
+                Featurette
+              </span>
+              <div className="h-px flex-1 bg-gold/15" />
+              <h2 className="font-headline italic text-lg md:text-2xl text-cream">
+                {tx.docTitle}
+              </h2>
+            </div>
+            <div className="relative border border-gold/20">
+              <div className="relative w-full aspect-video overflow-hidden">
+                <YoutubeEmbed
+                  videoId="93fmKniPP8k"
+                  startTime={657}
+                  title={tx.docFrameTitle}
+                />
+              </div>
+            </div>
+          </div>
+        </FadeIn>
+      </section>
+
+      {/* Como é a nossa noite */}
+      <section className="bg-noir py-16 md:py-24 px-6 md:px-12">
+        <div className="max-w-3xl mx-auto">
+          <FadeIn>
+            <div className="flex items-center gap-5 mb-10">
+              <span className="h-px flex-1 bg-gold/20" />
+              <span className="font-label text-[10px] uppercase tracking-[0.5em] text-gold-luminous shrink-0">
+                Cap. IV · A Noite
+              </span>
+              <span className="h-px flex-1 bg-gold/20" />
+            </div>
+          </FadeIn>
+
+          <FadeIn delay={0.1}>
+            <h2 className="font-headline italic text-2xl sm:text-3xl md:text-4xl text-cream text-center mb-8 leading-snug">
+              {tx.noiteTitle}
+            </h2>
+          </FadeIn>
+
+          <FadeIn delay={0.15}>
+            <p className="font-body text-sm sm:text-base leading-relaxed text-cream/60 font-light text-center max-w-2xl mx-auto">
+              {tx.noiteBody}
+            </p>
+          </FadeIn>
+
+          <FadeIn delay={0.2}>
+            <div className="mt-12 grid grid-cols-3 divide-x divide-gold/15 border border-gold/15">
+              {tx.noiteDetails.map(({ label, value }) => (
+                <div key={label} className="flex flex-col items-center gap-2 py-6 px-4 text-center">
+                  <span className="font-label text-[9px] uppercase tracking-[0.4em] text-gold-luminous/70">
+                    {label}
+                  </span>
+                  <span className="font-headline italic text-base sm:text-lg text-cream">
+                    {value}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </FadeIn>
+        </div>
+      </section>
+
+      {/* Gallery — fotos compactas */}
+      <div className="bg-noir text-cream pt-16 pb-24">
+        <FadeIn>
+          <div className="mx-auto mb-10 flex max-w-editorial flex-wrap justify-center gap-x-6 gap-y-3 px-6 md:px-12">
             {tx.categories.map((cat, i) => (
               <button
                 key={cat}
                 onClick={() => setActiveKey(categoryKeys[i])}
-                className={`font-label text-[11px] uppercase tracking-[0.2em] pb-1 transition-all duration-300 ${
+                className={`font-label text-[11px] uppercase tracking-[0.28em] pb-2 transition-colors duration-400 relative ${
                   activeKey === categoryKeys[i]
-                    ? 'text-primary border-b border-primary'
-                    : 'text-on-surface/60 hover:text-on-surface'
+                    ? 'text-gold-luminous'
+                    : 'text-cream/55 hover:text-cream'
                 }`}
               >
                 {cat}
+                <span
+                  className={`absolute -bottom-px left-0 right-0 h-px bg-gold-luminous transition-transform duration-500 ${
+                    activeKey === categoryKeys[i] ? 'scale-x-100' : 'scale-x-0'
+                  }`}
+                />
               </button>
             ))}
           </div>
         </FadeIn>
 
-        {/* Masonry Grid */}
-        <div className="max-w-[1600px] mx-auto px-6 lg:px-12">
+        <div className="max-w-4xl mx-auto px-6 md:px-12">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeKey + lang}
@@ -130,67 +196,34 @@ export default function GaleriaClient() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.4 }}
-              className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start"
+              className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3"
             >
-              <div className="md:col-span-4 flex flex-col gap-6">
-                {filtered.filter((_, i) => i % 3 === 0).map((item) => (
-                  <GalleryCard key={item.id} item={item} />
-                ))}
-              </div>
-              <div className="md:col-span-5 flex flex-col gap-6 md:mt-20">
-                {filtered.filter((_, i) => i % 3 === 1).map((item) => (
-                  <GalleryCard key={item.id} item={item} />
-                ))}
-              </div>
-              <div className="md:col-span-3 flex flex-col gap-6 md:-mt-12">
-                {filtered.filter((_, i) => i % 3 === 2).map((item) => (
-                  <GalleryCard key={item.id} item={item} />
-                ))}
-              </div>
+              {filtered.map((item, idx) => (
+                <GalleryCard key={item.id} item={item} index={idx + 1} />
+              ))}
             </motion.div>
           </AnimatePresence>
         </div>
-
-        {/* Documentary */}
-        <section className="mt-40 px-6 md:px-12 max-w-editorial mx-auto">
-          <div className="relative border border-gold/30 p-4 md:p-6">
-            <div className="mb-5 flex items-center gap-4">
-              <h3 className="font-headline italic text-2xl md:text-4xl text-on-surface">
-                {tx.docTitle}
-              </h3>
-              <div className="h-px flex-1 bg-gold/20" />
-            </div>
-            <div className="relative w-full aspect-video bg-charcoal-deep overflow-hidden">
-              <iframe
-                src="https://www.youtube.com/embed/93fmKniPP8k?start=657&rel=0&modestbranding=1"
-                title={tx.docFrameTitle}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="absolute inset-0 h-full w-full border-0"
-              />
-            </div>
-          </div>
-        </section>
       </div>
 
       {/* CTA */}
-      <section className="py-24 md:py-32 bg-surface px-6">
+      <section className="bg-noir-deep py-20 md:py-28 px-6 border-t border-gold/15">
         <FadeIn>
           <div className="max-w-editorial mx-auto flex flex-col md:flex-row items-center justify-between gap-12">
             <div className="max-w-xl">
-              <h2 className="mb-6 font-headline text-3xl leading-tight tracking-tight sm:text-4xl md:text-6xl md:leading-none">
+              <span className="font-label text-[10px] uppercase tracking-[0.4em] text-gold-luminous mb-4 block">
+                Próxima Cena
+              </span>
+              <h2 className="mb-6 font-headline italic text-3xl leading-tight tracking-tight sm:text-4xl md:text-5xl text-cream">
                 {tx.ctaTitle}
               </h2>
-              <p className="font-body text-on-surface/60 text-lg">{tx.ctaBody}</p>
+              <p className="font-body text-cream/60 text-base font-light leading-relaxed">{tx.ctaBody}</p>
             </div>
             <div className="relative flex-shrink-0">
-              <div className="absolute -inset-3 translate-x-1 translate-y-1 border border-gold/20 sm:-inset-4 sm:translate-x-2 sm:translate-y-2" />
-              <Link
-                href="/reserva"
-                className="relative inline-flex max-w-full justify-center bg-primary px-8 py-5 text-center font-label text-xs uppercase tracking-[0.2em] text-white transition-all duration-400 hover:bg-primary-container hover:text-on-primary-container sm:px-12 sm:py-6 sm:tracking-[0.3em]"
-              >
+              <div className="absolute -inset-3 translate-x-1 translate-y-1 border border-gold/30 sm:-inset-4 sm:translate-x-2 sm:translate-y-2" />
+              <ReservaButton className="btn-cinema relative">
                 {tx.ctaButton}
-              </Link>
+              </ReservaButton>
             </div>
           </div>
         </FadeIn>
@@ -201,30 +234,40 @@ export default function GaleriaClient() {
 
 function GalleryCard({
   item,
+  index,
 }: {
-  item: { id: number; img: string; alt: string; aspect: string; label: string; title: string }
+  item: { id: number; img: string; alt: string; label: string; title: string }
+  index: number
 }) {
   return (
     <motion.div
       layout
-      initial={{ opacity: 0, scale: 0.96 }}
+      initial={{ opacity: 0, scale: 0.97 }}
       animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.96 }}
+      exit={{ opacity: 0, scale: 0.97 }}
       transition={{ duration: 0.4 }}
-      className="relative overflow-hidden group"
+      className="relative overflow-hidden group bg-noir-ember aspect-[3/4]"
+      data-cinema-view="view"
     >
-      <div className={`relative ${item.aspect}`}>
-        <Image
-          src={item.img}
-          alt={item.alt}
-          fill
-          className="object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
-        />
-        <div className="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-black/85 to-transparent opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-500">
-          <p className="font-label text-xs tracking-wide uppercase text-gold">{item.label}</p>
-          <p className="font-headline italic text-lg text-white">{item.title}</p>
-        </div>
+      <Image
+        src={item.img}
+        alt={item.alt}
+        fill
+        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+        className="object-cover duotone-noir group-hover:scale-105 transition-transform duration-1000 ease-cinema"
+      />
+      <div className="absolute top-2 left-2 z-10 flex items-center gap-1.5 pointer-events-none">
+        <span className="font-headline italic text-[10px] text-gold-luminous/80">
+          {String(index).padStart(3, '0')}
+        </span>
       </div>
+      <div className="absolute bottom-0 left-0 w-full p-3 bg-gradient-to-t from-noir-deep/90 via-noir-deep/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+        <p className="font-label text-[9px] tracking-[0.22em] uppercase text-gold-luminous mb-0.5">
+          {item.label}
+        </p>
+        <p className="font-headline italic text-sm text-cream leading-tight">{item.title}</p>
+      </div>
+      <div className="absolute inset-0 border border-gold/0 group-hover:border-gold/35 transition-colors duration-500" />
     </motion.div>
   )
 }

@@ -3,11 +3,14 @@ import { Playfair_Display, Montserrat } from 'next/font/google'
 import './globals.css'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
-import GSAPProvider from '@/components/GSAPProvider'
 import GrainOverlay from '@/components/GrainOverlay'
 import LoadingScreen from '@/components/LoadingScreen'
 import JsonLd from '@/components/JsonLd'
+import CinemaCursor from '@/components/CinemaCursor'
+import PageProgress from '@/components/PageProgress'
+import ReservaModal from '@/components/ReservaModal'
 import { LanguageProvider } from '@/contexts/LanguageContext'
+import { ReservaModalProvider } from '@/contexts/ReservaModalContext'
 
 const playfair = Playfair_Display({
   subsets: ['latin'],
@@ -29,14 +32,11 @@ const montserrat = Montserrat({
 const SITE_URL = 'https://saudadeefado.pt'
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#F9F9F9' },
-    { media: '(prefers-color-scheme: dark)', color: '#0D0D0D' },
-  ],
+  themeColor: '#1A1A1A',
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
-  colorScheme: 'light',
+  colorScheme: 'dark',
 }
 
 export const metadata: Metadata = {
@@ -122,22 +122,25 @@ export default function RootLayout({
       className={`${playfair.variable} ${montserrat.variable}`}
       suppressHydrationWarning
     >
-      <body className="min-h-screen">
+      <body className="min-h-screen bg-noir">
         <JsonLd data={organizationJsonLd} />
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100000] focus:bg-charcoal focus:text-gold focus:px-4 focus:py-2 focus:font-label focus:text-xs focus:uppercase focus:tracking-widest"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100000] focus:bg-noir-deep focus:text-gold-luminous focus:px-4 focus:py-2 focus:font-label focus:text-xs focus:uppercase focus:tracking-widest"
         >
           Saltar para o conteúdo
         </a>
         <LoadingScreen />
         <GrainOverlay />
+        <PageProgress />
+        <CinemaCursor />
         <LanguageProvider>
-          <GSAPProvider>
+          <ReservaModalProvider>
             <Navbar />
             <div id="main">{children}</div>
             <Footer />
-          </GSAPProvider>
+            <ReservaModal />
+          </ReservaModalProvider>
         </LanguageProvider>
       </body>
     </html>

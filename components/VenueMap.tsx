@@ -30,8 +30,8 @@ export default function VenueMap({
         <VenueMapInner height={height} />
       </div>
 
-      {/* Edge vignette — fades the map into the dark section */}
-      <div className="pointer-events-none absolute inset-0 z-10 shadow-[inset_0_0_70px_25px_rgba(13,13,13,0.85)]" />
+      {/* Edge vignette — soft fade into the section */}
+      <div className="pointer-events-none absolute inset-0 z-10 shadow-[inset_0_0_50px_10px_rgba(13,13,13,0.35)]" />
 
       {/* Hairline frame */}
       <div className="pointer-events-none absolute inset-0 z-10 ring-1 ring-inset ring-gold/20" />

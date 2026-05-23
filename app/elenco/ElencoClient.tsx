@@ -1,9 +1,9 @@
 'use client'
 
 import Image from 'next/image'
-import Link from 'next/link'
 import { motion } from 'framer-motion'
 import FadeIn from '@/components/FadeIn'
+import ReservaButton from '@/components/ReservaButton'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { translations } from '@/lib/translations'
 
@@ -27,91 +27,112 @@ export default function ElencoClient() {
   }))
 
   return (
-    <main className="pt-32 pb-20">
-      <section className="max-w-editorial mx-auto px-6 md:px-12 mb-24 md:mb-32">
+    <main className="bg-noir pt-32 pb-20">
+      {/* Hero — Dramatis Personae */}
+      <section className="max-w-editorial mx-auto px-6 md:px-12 mb-14 md:mb-20">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 items-end">
           <FadeIn className="md:col-span-8">
-            <span className="font-label text-[10px] uppercase tracking-[0.3em] text-primary mb-6 block">
-              {tx.label}
-            </span>
-            <h1 className="font-headline text-4xl leading-[1.08] tracking-tight text-balance sm:text-5xl md:text-7xl lg:text-8xl">
+            <div className="mb-7 flex items-center gap-4">
+              <span className="h-px w-12 bg-gold/60" />
+              <span className="font-label text-[10px] uppercase tracking-[0.5em] text-gold-luminous">
+                Cap. II · Dramatis Personae
+              </span>
+            </div>
+            <h1 className="font-headline text-3xl sm:text-cinema-sm lg:text-cinema leading-[1.05] tracking-tight text-balance text-cream">
               {tx.title1}{' '}
-              <span className="italic font-normal text-gold">{tx.titleEm}</span>{' '}
+              <span className="italic font-light text-gold-luminous text-glow-gold">
+                {tx.titleEm}
+              </span>{' '}
               {tx.title2}
             </h1>
           </FadeIn>
-          <FadeIn delay={0.15} className="md:col-start-7 md:col-span-6">
-            <p className="text-on-surface-variant text-base leading-relaxed font-light border-l-2 border-gold pl-6 italic max-w-reading">
+          <FadeIn delay={0.15} className="md:col-start-8 md:col-span-5">
+            <p className="font-body text-cream/65 text-base leading-relaxed font-light border-l border-gold/40 pl-6 italic max-w-reading">
               {tx.intro}
             </p>
           </FadeIn>
         </div>
       </section>
 
-      <section className="max-w-editorial mx-auto px-6 md:px-12 space-y-32 md:space-y-40">
-        {artists.map((artist, i) => (
-          <FadeIn key={artist.name} delay={0.05}>
-            <article
-              className={`grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-start ${
-                i % 2 !== 0 ? 'md:mt-32' : ''
-              }`}
-            >
-              <motion.div
-                className={`group overflow-hidden ${i % 2 !== 0 ? 'md:order-2' : ''}`}
-                whileHover="hovered"
-                initial="initial"
-              >
-                <div className="aspect-[3/4] relative bg-surface-container-low p-4 md:p-6 overflow-hidden shadow-soft">
+      {/* Artist grid — contact sheet */}
+      <section className="max-w-editorial mx-auto px-6 md:px-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-gold/15">
+          {artists.map((artist, i) => (
+            <FadeIn key={artist.name} delay={i * 0.08}>
+              <article className="bg-noir p-8 md:p-10 flex flex-col gap-5">
+                {/* Image */}
+                <motion.div
+                  className="relative aspect-[4/3] overflow-hidden bg-noir-ember"
+                  whileHover="hovered"
+                  initial="initial"
+                >
+                  {/* Corner ornaments */}
+                  <span className="absolute top-2 left-2 z-20 h-4 w-4 border-t border-l border-gold/50 pointer-events-none" />
+                  <span className="absolute top-2 right-2 z-20 h-4 w-4 border-t border-r border-gold/50 pointer-events-none" />
+                  <span className="absolute bottom-2 left-2 z-20 h-4 w-4 border-b border-l border-gold/50 pointer-events-none" />
+                  <span className="absolute bottom-2 right-2 z-20 h-4 w-4 border-b border-r border-gold/50 pointer-events-none" />
+
+                  {/* Scene number */}
+                  <span className="absolute top-3 left-4 z-20 font-headline italic text-lg text-cream/40 leading-none">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+
                   <motion.div
                     variants={{
                       initial: { scale: 1 },
-                      hovered: { scale: 1.04 },
+                      hovered: { scale: 1.03 },
                     }}
-                    transition={{ duration: 0.9, ease: [0.4, 0, 0.2, 1] }}
+                    transition={{ duration: 1.1, ease: [0.83, 0, 0.17, 1] }}
                     className="relative w-full h-full"
                   >
                     <Image
                       src={artist.img}
                       alt={artist.alt}
                       fill
-                      sizes="(min-width: 768px) 50vw, 100vw"
-                      className="object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
+                      sizes="(min-width: 640px) 50vw, 100vw"
+                      className="object-cover duotone-noir"
                     />
                   </motion.div>
-                  <div className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-on-surface/5" />
-                </div>
-              </motion.div>
+                </motion.div>
 
-              <div
-                className={`max-w-md flex flex-col justify-center ${
-                  i % 2 !== 0 ? 'md:order-1' : ''
-                }`}
-              >
-                <span className="font-label text-[10px] uppercase tracking-[0.3em] text-on-surface/45 mb-3 block">
-                  {artist.role}
-                </span>
-                <h2 className="mb-5 font-headline text-2xl uppercase tracking-[0.14em] text-gold sm:text-3xl sm:tracking-widest">
-                  {artist.name}
-                </h2>
-                <p className="text-on-surface/70 mb-10 font-light leading-relaxed">{artist.bio}</p>
-              </div>
-            </article>
-          </FadeIn>
-        ))}
+                {/* Text */}
+                <div className="flex flex-col gap-3">
+                  <span className="font-label text-[10px] uppercase tracking-[0.4em] text-gold/70">
+                    {artist.role}
+                  </span>
+                  <h2 className="font-headline italic text-2xl md:text-3xl text-cream tracking-tight">
+                    {artist.name}
+                  </h2>
+                  <div className="h-px w-10 bg-gold-luminous" />
+                  <p className="text-cream/60 font-light text-sm leading-relaxed">
+                    {artist.bio}
+                  </p>
+                </div>
+              </article>
+            </FadeIn>
+          ))}
+        </div>
       </section>
 
-      <section className="mt-40 md:mt-60 py-32 md:py-40 bg-surface-container-low">
+      {/* Closing scene — quote */}
+      <section className="mt-20 md:mt-28 py-24 md:py-36 bg-noir-deep relative overflow-hidden border-y border-gold/15">
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              'radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.7) 100%)',
+          }}
+        />
         <FadeIn>
-          <div className="max-w-3xl mx-auto text-center px-6">
-            <blockquote className="font-headline text-4xl md:text-5xl italic text-on-surface mb-16 leading-tight text-balance">
+          <div className="relative max-w-4xl mx-auto text-center px-6">
+            <span className="font-label text-[10px] uppercase tracking-[0.5em] text-gold-luminous mb-10 block">
+              Closing Lines
+            </span>
+            <blockquote className="font-headline italic text-3xl md:text-5xl lg:text-6xl text-cream mb-12 leading-tight text-balance">
               &ldquo;{tx.quote.replace(/^"|"$/g, '')}&rdquo;
             </blockquote>
-            <Link
-              href="/reserva"
-              className="inline-flex max-w-full justify-center border border-primary bg-primary px-8 py-5 text-center font-label text-xs uppercase tracking-[0.18em] text-white shadow-soft transition-all duration-500 hover:bg-transparent hover:text-primary sm:px-12 sm:text-sm sm:tracking-[0.2em]"
-            >
-              {tx.cta}
-            </Link>
+            <div className="mx-auto h-px w-24 bg-gold-luminous mb-12" />
+            <ReservaButton>{tx.cta}</ReservaButton>
           </div>
         </FadeIn>
       </section>
